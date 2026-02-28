@@ -1,10 +1,6 @@
 ---
 name: response_R03_en
 description: Quiet-Question-DL (medialab R03) - 30 questions, downlink network (English)
-analysis:
-  preset: config/analysis_presets/default.yaml
-  report:
-    template: medialab.html.jinja2
 params:
   output_dir: temp/output
   network: {NETWORK: [DC: '40112']}

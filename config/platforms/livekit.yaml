@@ -1,0 +1,53 @@
+---
+# LiveKit Platform Configuration
+#
+# Platform: LiveKit Agents Playground
+# URL: https://livekit.io/
+# Authentication: Not required (public demo)
+# Available tones: Haley, Samuel, Felicia, Jules, Doug
+name: livekit
+description: LiveKit Voice AI Playground (Public Demo)
+config:
+  url: https://livekit.io/
+auth:
+  default_mode: public
+  auto_fallback: [public]
+actions:
+  # Setup: Navigate to playground
+  setup:public:
+    - type: browser.navigate
+      url: ${config.url}
+      wait_until: load
+    - type: control.log
+      message: LiveKit page loaded
+
+  # Enter: Start conversation
+  # Optional params.tone_name: Haley, Samuel, Felicia, Jules, Doug
+  # If tone_name is empty, uses platform default
+  enter:
+    - type: browser.click
+      selector: text=Talk to LiveKit Agent
+      timeout_ms: 10000
+    - type: audio.wait_for_speech_start
+      timeout_ms: 15000
+    - type: browser.click
+      selector: h2:has-text('${params.tone_name}')
+      timeout_ms: 5000
+    - type: control.log
+      message: LiveKit session started
+
+  # Configure: Switch tone during session
+  configure:
+    - type: browser.click
+      selector: h2:has-text('${params.tone_name}')
+      timeout_ms: 5000
+    - type: control.log
+      message: 'Tone switched to: ${params.tone_name}'
+
+  # Exit: End session
+  exit:
+    - type: browser.click
+      selector: button:has(img[alt='close'])
+      timeout_ms: 5000
+    - type: control.log
+      message: LiveKit session ended

@@ -2,10 +2,6 @@
 name: response_R14_en
 description: Quiet-UnCompleteMeaning_ToneChange (medialab R14) - 30 uncom_tone materials
   (English)
-analysis:
-  preset: config/analysis_presets/default.yaml
-  report:
-    template: medialab.html.jinja2
 params:
   output_dir: temp/output
 steps:

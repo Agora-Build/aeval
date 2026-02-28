@@ -1,0 +1,179 @@
+---
+# MediaLab corpus. id = filename without .wav: cn_* / en_* / sound_*.
+# R05/R06: placeholder (stop_speech/forced_mute TBD).
+corpus:
+  # standard_questions
+  - id: en_question1
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/standard_questions/en_question1.wav
+  - id: en_question2
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/standard_questions/en_question2.wav
+  - id: en_question3
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/standard_questions/en_question3.wav
+  - id: cn_question1
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/standard_questions/cn_question1.wav
+  - id: cn_question2
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/standard_questions/cn_question2.wav
+  - id: cn_question3
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/standard_questions/cn_question3.wav
+  # short_questions
+  - id: en_question_short1
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/short_questions/en_question_short1.wav
+  - id: en_question_short2
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/short_questions/en_question_short2.wav
+  - id: en_question_short3
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/short_questions/en_question_short3.wav
+  # short_phrases_5words
+  - id: cn_Short05Wordswav1
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/short_phrases_5words/cn_Short05Wordswav1.wav
+  - id: cn_Short05Wordswav2
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/short_phrases_5words/cn_Short05Wordswav2.wav
+  - id: cn_Short05Wordswav11
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/short_phrases_5words/cn_Short05Wordswav11.wav
+  - id: en_Short05Wordswav1
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/short_phrases_5words/en_Short05Wordswav1.wav
+  - id: en_Short05Wordswav2
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/short_phrases_5words/en_Short05Wordswav2.wav
+  - id: en_Short05Wordswav11
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/short_phrases_5words/en_Short05Wordswav11.wav
+  # nonsemantic_sounds
+  - id: sound_NonsemanticCoughLaughterwav1
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/nonsemantic_sounds/sound_NonsemanticCoughLaughterwav1.wav
+  - id: sound_NonsemanticCoughLaughterwav2
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/nonsemantic_sounds/sound_NonsemanticCoughLaughterwav2.wav
+  - id: sound_NonsemanticCoughLaughterwav3
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/nonsemantic_sounds/sound_NonsemanticCoughLaughterwav3.wav
+  # short_phrases_10words
+  - id: cn_Short10Wordswav1
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/short_phrases_10words/cn_Short10Wordswav1.wav
+  - id: cn_Short10Wordswav2
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/short_phrases_10words/cn_Short10Wordswav2.wav
+  - id: cn_Short10Wordswav11
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/short_phrases_10words/cn_Short10Wordswav11.wav
+  - id: en_Short10Wordswav1
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/short_phrases_10words/en_Short10Wordswav1.wav
+  - id: en_Short10Wordswav2
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/short_phrases_10words/en_Short10Wordswav2.wav
+  - id: en_Short10Wordswav11
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/short_phrases_10words/en_Short10Wordswav11.wav
+  # long_sentences
+  - id: cn_LongWordswav1
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/long_sentences/cn_LongWordswav1.wav
+  - id: cn_LongWordswav2
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/long_sentences/cn_LongWordswav2.wav
+  - id: cn_LongWordswav3
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/long_sentences/cn_LongWordswav3.wav
+  - id: en_LongWordswav1
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/long_sentences/en_LongWordswav1.wav
+  - id: en_LongWordswav2
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/long_sentences/en_LongWordswav2.wav
+  - id: en_LongWordswav3
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/interruption/long_sentences/en_LongWordswav3.wav
+  # ai_false_interrupt (en_* _1, _2, _16)
+  - id: en_com_tone_1
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/ai_false_interrupt/complete_tone_change/en_com_tone_1.wav
+  - id: en_com_tone_2
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/ai_false_interrupt/complete_tone_change/en_com_tone_2.wav
+  - id: en_com_tone_16
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/ai_false_interrupt/complete_tone_change/en_com_tone_16.wav
+  - id: en_uncom_tone_1
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/ai_false_interrupt/incomplete_tone_change/en_uncom_tone_1.wav
+  - id: en_uncom_tone_2
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/ai_false_interrupt/incomplete_tone_change/en_uncom_tone_2.wav
+  - id: en_uncom_tone_16
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/ai_false_interrupt/incomplete_tone_change/en_uncom_tone_16.wav
+  - id: en_com_slowspeech_1
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/ai_false_interrupt/complete_slow_speech/en_com_slowspeech_1.wav
+  - id: en_com_slowspeech_2
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/ai_false_interrupt/complete_slow_speech/en_com_slowspeech_2.wav
+  - id: en_com_slowspeech_16
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/ai_false_interrupt/complete_slow_speech/en_com_slowspeech_16.wav
+  - id: en_uncom_normal_1
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/ai_false_interrupt/incomplete_normal_speech/en_uncom_normal_1.wav
+  - id: en_uncom_normal_2
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/ai_false_interrupt/incomplete_normal_speech/en_uncom_normal_2.wav
+  - id: en_uncom_normal_16
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/ai_false_interrupt/incomplete_normal_speech/en_uncom_normal_16.wav
+  - id: en_uncom_slowspeech_1
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/ai_false_interrupt/incomplete_slow_speech/en_uncom_slowspeech_1.wav
+  - id: en_uncom_slowspeech_2
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/ai_false_interrupt/incomplete_slow_speech/en_uncom_slowspeech_2.wav
+  - id: en_uncom_slowspeech_16
+    file: corpus/basic_capabilities/voice_interaction/interaction_capability/response/ai_false_interrupt/incomplete_slow_speech/en_uncom_slowspeech_16.wav
+  # noise
+  - id: sound_Street_Noise_5dB
+    file: corpus/basic_capabilities/voice_interaction/robustness_recognition/noise/environmental/sound_Street_Noise_5dB.wav
+  - id: sound_Cafe_Noise_5dB
+    file: corpus/basic_capabilities/voice_interaction/robustness_recognition/noise/environmental/sound_Cafe_Noise_5dB.wav
+  - id: en_Clear_Voice_10dB
+    file: corpus/basic_capabilities/voice_interaction/robustness_recognition/noise/environmental/en_Clear_Voice_10dB.wav
+  - id: cn_Clear_Voice_10dB
+    file: corpus/basic_capabilities/voice_interaction/robustness_recognition/noise/environmental/cn_Clear_Voice_10dB.wav
+  - id: silence30
+    file: corpus/basic_capabilities/voice_interaction/robustness_recognition/noise/pure_noise/silence30.wav
+corpus_sets:
+  one_question_en:
+    description: R00 (1 question, English)
+    items: [en_question1]
+  one_question_cn:
+    description: R00 (1 question, Chinese)
+    items: [cn_question1]
+  three_questions_en:
+    description: R01-R04,R07-R11 (3 questions, English)
+    items: [en_question1, en_question2, en_question3]
+  three_questions_cn:
+    description: R01-R04,R07-R11 (3 questions, Chinese)
+    items: [cn_question1, cn_question2, cn_question3]
+  response_R12_material:
+    description: R12 (1 silence, 30 seconds)
+    items: [silence30]
+  response_R13_material:
+    description: R13 com_tone (2 male+1 female)
+    items: [en_com_tone_1, en_com_tone_2, en_com_tone_16]
+  response_R14_material:
+    description: R14 uncom_tone (2 male+1 female)
+    items: [en_uncom_tone_1, en_uncom_tone_2, en_uncom_tone_16]
+  response_R15_material:
+    description: R15 com_slowspeech (2 male+1 female)
+    items:
+      - en_com_slowspeech_1
+      - en_com_slowspeech_2
+      - en_com_slowspeech_16
+  response_R16_material:
+    description: R16 uncom_normal (2 male+1 female)
+    items: [en_uncom_normal_1, en_uncom_normal_2, en_uncom_normal_16]
+  response_R17_material:
+    description: R17 uncom_slowspeech (2 male+1 female)
+    items:
+      - en_uncom_slowspeech_1
+      - en_uncom_slowspeech_2
+      - en_uncom_slowspeech_16
+  short5_en:
+    description: I02,I08 (3 short 5-word phrases, English)
+    items:
+      - en_Short05Wordswav1
+      - en_Short05Wordswav2
+      - en_Short05Wordswav11
+  short5_cn:
+    description: I02,I08 (3 short 5-word phrases, Chinese)
+    items:
+      - cn_Short05Wordswav1
+      - cn_Short05Wordswav2
+      - cn_Short05Wordswav11
+  short10_cn:
+    description: I03 (3 short 10-word phrases, Chinese)
+    items:
+      - cn_Short10Wordswav1
+      - cn_Short10Wordswav2
+      - cn_Short10Wordswav11
+  short10_en:
+    description: I03 (3 short 10-word phrases, English)
+    items:
+      - en_Short10Wordswav1
+      - en_Short10Wordswav2
+      - en_Short10Wordswav11
+  long_sentences_en:
+    description: I04-I07 (3 long sentences, English)
+    items: [en_LongWordswav1, en_LongWordswav2, en_LongWordswav3]
+  long_sentences_cn:
+    description: I04-I07 (3 long sentences, Chinese)
+    items: [cn_LongWordswav1, cn_LongWordswav2, cn_LongWordswav3]

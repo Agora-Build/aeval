@@ -1,0 +1,113 @@
+---
+# Default Analysis Preset
+# This preset demonstrates the complete analysis pipeline with all core features.
+# It uses only local/free tools (no API keys required for basic functionality).
+
+# Enable caching to speed up re-analysis
+cache: true
+
+# Parallel execution for better performance
+parallel: false  # Set to true for faster processing (experimental)
+stages:
+  # ============================================================================
+  # Layer 1: Extractors - Extract raw data from recordings
+  # ============================================================================
+  # Extract browser events (user interactions, agent responses)
+  - stage: events
+    config: {}
+  # Voice Activity Detection - Detect speech segments
+  # Combines multiple VAD sources for better accuracy
+  - stage: vad
+    config:
+      # VAD sources to use (events, energy, silero)
+      # - events: Browser-based detection (fast, has speaker info)
+      # - energy: Energy-based detection (simple, good for noise)
+      # - silero: ML-based detection (accurate, CPU intensive)
+      sources: [energy, events]
+      # Silero VAD settings (only used if "silero" in sources)
+      # silero_threshold: 0.3
+      # min_speech_duration_ms: 250
+      # min_silence_duration_ms: 300
+      # Energy VAD settings
+      # snr_threshold: 5.0
+      # min_duration_ms: 100
+  # ============================================================================
+  # Layer 2: Analyzers - Process and merge extracted data
+  # ============================================================================
+  # Merge VAD segments from multiple sources
+  # This creates a unified timeline of speech activity
+  - stage: vad_merger
+    config:
+      # Merge strategy for overlapping segments
+      # - "union": Keep all speech (more inclusive)
+      # - "intersection": Only keep overlaps (more conservative)
+      merge_strategy: union
+
+      # Minimum gap to keep segments separate (ms)
+      min_gap_ms: 100
+
+  # Speech-to-Text - Transcribe speech segments
+  # Uses Whisper (local, no API key needed)
+  - stage: stt
+    config:
+      provider: whisper
+
+      # Language detection (leave empty for auto-detect)
+      language: ''  # or "en", "zh", etc.
+      # Whisper model size (tiny, base, small, medium, large)
+      # Larger = more accurate but slower
+      # model: "base"
+  # Segment conversation into turns
+  # A "turn" is a complete exchange (user speaks, agent responds)
+  - stage: turn_segmenter
+    config:
+      # How long to wait before considering agent's response complete (seconds)
+      response_timeout_s: 5.0
+
+      # Tolerance for detecting interruptions (seconds)
+      # Speech within this window is considered an interruption
+      interruption_tolerance_s: 2.0
+
+  # ============================================================================
+  # Layer 3: Metrics - Calculate performance metrics
+  # ============================================================================
+  # Calculate all metrics (response latency, interruptions, etc.)
+  - stage: metrics_calculator
+    config: {}
+  # ============================================================================
+  # Layer 4: Reporting - Generate reports
+  # ============================================================================
+  # HTML Report - Interactive visual report
+  - stage: html_reporter
+    config:
+      template: default.html.jinja2
+      output: report.html
+
+  # JSON Export - Machine-readable export
+  - stage: json_exporter
+    config:
+      pretty: true
+      output: metrics.json
+# ============================================================================
+# Advanced Features (Commented Out - Require Additional Setup)
+# ============================================================================
+
+# Response Analysis - Analyze agent response quality
+# Requires: OpenAI API key for LLM-based relevance filtering
+# - stage: response_analyzer
+#   config:
+#  # Filter out irrelevant responses using LLM
+#     filter_relevance:
+#       enabled: false  # Set to true and configure OpenAI API key
+#       provider: openai
+#       model: gpt-4
+#
+#  # Maximum acceptable response latency (ms)
+#     max_latency_ms: 10000
+
+# Individual Metrics Calculators (if you want fine-grained control)
+# Note: metrics_calculator already includes these, so you don't need both
+# - stage: response_metrics
+#   config: {}
+# - stage: interruption_metrics
+#   config: {}

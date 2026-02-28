@@ -1,0 +1,8 @@
+---
+# Stub network backend: log only, no real network simulation.
+# Use for passing and logging network params (e.g. mediatest UC/DC) until
+# real backends (chrome, tc) are implemented.
+name: stub
+description: Stub network backend (log only, no-op restore)
+backend: stub
+config: {}

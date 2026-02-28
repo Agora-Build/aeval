@@ -1,0 +1,37 @@
+---
+name: response_R13_en
+description: Quiet-CompleteMeaning_ToneChange (medialab R13) - 30 com_tone materials
+  (English)
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: medialab.html.jinja2
+params:
+  output_dir: temp/output
+steps:
+  - type: platform.setup
+    platform_id: livekit
+    params:
+      mode: public
+  - type: audio.start_recording
+  - type: platform.enter
+    params:
+      tone_name: ''
+  - type: audio.wait_for_speech
+    timeout_ms: 30000
+    silence_duration_ms: 1500
+    description: Wait for agent greeting
+  - type: control.for_each
+    corpus_set: response_R13_material
+    steps:
+      - type: audio.play
+        corpus_id: ${item}
+        description: Play com_tone material (complete meaning, tone change)
+      - type: audio.wait_for_speech
+        end_timeout_ms: 45000
+        silence_duration_ms: 1000
+        description: Wait for agent response
+  - type: control.log
+    message: Response R13 (en) corpus loop completed.
+  - type: audio.stop_recording
+  - type: platform.exit

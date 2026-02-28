@@ -1,0 +1,49 @@
+---
+name: interrupt_I01_en
+description: Quiet-Nonsemantic (medialab I01) - demo 3 pairs (English)
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: medialab.html.jinja2
+params:
+  output_dir: temp/output
+steps:
+  - type: platform.setup
+    platform_id: livekit
+    params:
+      mode: public
+  - type: audio.start_recording
+  - type: platform.enter
+    params:
+      tone_name: ''
+  - type: audio.wait_for_speech
+    timeout_ms: 30000
+    silence_duration_ms: 1500
+    description: Wait for agent greeting
+  - type: control.for_each
+    items:
+      - question_id: en_question1
+        material_id: sound_NonsemanticCoughLaughterwav1
+      - question_id: en_question2
+        material_id: sound_NonsemanticCoughLaughterwav2
+      - question_id: en_question3
+        material_id: sound_NonsemanticCoughLaughterwav3
+    steps:
+      - type: audio.play
+        corpus_id: ${item.question_id}
+        description: Play question (user asks)
+      - type: audio.wait_for_speech_start
+        timeout_ms: 15000
+        wait_after_start_ms: 2000
+        description: Wait for agent to start speaking, then 2s before interrupt
+      - type: audio.play
+        corpus_id: ${item.material_id}
+        description: Play nonsemantic (cough/laughter) as interrupt
+      - type: audio.wait_for_speech
+        end_timeout_ms: 40000
+        silence_duration_ms: 1000
+        description: Wait for agent response to interruption
+  - type: control.log
+    message: Interrupt I01 (en) completed.
+  - type: audio.stop_recording
+  - type: platform.exit

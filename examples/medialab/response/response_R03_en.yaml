@@ -1,0 +1,43 @@
+---
+name: response_R03_en
+description: Quiet-Question-DL (medialab R03) - 30 questions, downlink network (English)
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: medialab.html.jinja2
+params:
+  output_dir: temp/output
+  network: {NETWORK: [DC: '40112']}
+steps:
+  - type: platform.setup
+    platform_id: livekit
+    params:
+      mode: public
+  - type: network.apply
+    network_id: stub
+  - type: network.status
+    network_id: stub
+  - type: audio.start_recording
+  - type: platform.enter
+    params:
+      tone_name: ''
+  - type: audio.wait_for_speech
+    timeout_ms: 30000
+    silence_duration_ms: 1500
+    description: Wait for agent greeting
+  - type: control.for_each
+    corpus_set: three_questions_en
+    steps:
+      - type: audio.play
+        corpus_id: ${item}
+        description: Play question (user prompt)
+      - type: audio.wait_for_speech
+        end_timeout_ms: 45000
+        silence_duration_ms: 1000
+        description: Wait for agent response
+  - type: control.log
+    message: Response R03 (en) corpus loop completed.
+  - type: audio.stop_recording
+  - type: platform.exit
+  - type: network.restore
+    network_id: stub

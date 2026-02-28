@@ -1,0 +1,97 @@
+---
+name: LiveKit multi-turn dialogue (with interruption)
+description: Multi-turn conversation example that includes an interruption and context
+  recall; not a dedicated interruption test.
+# Analysis configuration
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: default.html.jinja2
+params:
+  output_dir: temp/output
+steps:
+  # ------------------------------------------------------------------
+  # Step 0: Platform Setup & Entry
+  # ------------------------------------------------------------------
+  - type: platform.setup
+    platform_id: livekit
+    params:
+      mode: public
+
+  # START RECORDING before platform.enter (initializes AudioGraph)
+  - type: audio.start_recording
+  - type: platform.enter
+    params:
+      tone_name: ''  # Empty string triggers auto-skip for tone selection
+
+  # ------------------------------------------------------------------
+  # Step 1: Initialization
+  # Wait for potential greeting from Agent (extended timeout).
+  # ------------------------------------------------------------------
+  - type: audio.wait_for_speech
+    timeout_ms: 30000  # Wait for up to 30s for greeting
+    silence_duration_ms: 1500  # Slightly longer pause detection for greetings
+    description: Allowing agent to say hello and intro
+
+  # ------------------------------------------------------------------
+  # Step 2: Turn 1 - General Inquiry (Paris)
+  # Tests: Standard turn-taking
+  # ------------------------------------------------------------------
+  - type: audio.play
+    file: examples/multi_turn_dialogue/audio/1_paris.wav
+    log_event: topic_paris
+    description: 'User: Ask for Paris travel tips'
+
+  # Combined wait_for_speech (waits for start then end)
+  - type: audio.wait_for_speech
+    end_timeout_ms: 45000  # Increase to 45s for long answers/network lag
+    silence_duration_ms: 1000
+    description: Waiting for full agent response
+
+  # ------------------------------------------------------------------
+  # Step 3: Turn 2 - Specific Follow-up (Louvre)
+  # Tests: Context maintenance, VAD endpointing
+  # ------------------------------------------------------------------
+  - type: audio.play
+    file: examples/multi_turn_dialogue/audio/2_louvre.wav
+    log_event: topic_louvre
+    description: 'User: Ask about Louvre reservation'
+
+  # Wait for agent to START answering (don't wait for end)
+  - type: audio.wait_for_speech_start
+    timeout_ms: 15000
+    wait_after_start_ms: 2000
+    description: Wait for agent to start speaking, then wait 2s more
+
+  # ------------------------------------------------------------------
+  # Step 4: Turn 3 - Off-topic tangent (WiFi password)
+  # Dialogue continues with a tangent while agent was still speaking
+  # ------------------------------------------------------------------
+  - type: audio.play
+    file: examples/multi_turn_dialogue/audio/3_wifi_interrupt.wav
+    log_event: topic_wifi
+    description: 'User: Ask off-topic question (WiFi password)'
+  - type: audio.wait_for_speech
+    end_timeout_ms: 30000
+    silence_duration_ms: 1000
+    description: Waiting for agent to react
+
+  # ------------------------------------------------------------------
+  # Step 5: Turn 4 - Resume topic (apologize and recall)
+  # ------------------------------------------------------------------
+  - type: audio.play
+    file: examples/multi_turn_dialogue/audio/4_recall.wav
+    log_event: topic_recall
+    description: 'User: Apologize and ask to resume previous topic'
+  - type: audio.wait_for_speech
+    end_timeout_ms: 45000  # Long wait for resumed explanation
+    silence_duration_ms: 2000
+    description: Recording the resumed explanation
+
+  # ------------------------------------------------------------------
+  # Step 6: Wrap up
+  # ------------------------------------------------------------------
+  - type: control.log
+    message: Multi-turn dialogue example completed.
+  - type: audio.stop_recording
+  - type: platform.exit

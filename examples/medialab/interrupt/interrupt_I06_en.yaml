@@ -1,0 +1,51 @@
+---
+name: interrupt_I06_en
+description: Quiet-Delay-DL (medialab I06) - Delay, 30 pairs, downlink (English)
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: medialab.html.jinja2
+params:
+  output_dir: temp/output
+  network: {NETWORK: [DC: '40112']}
+steps:
+  - type: platform.setup
+    platform_id: livekit
+    params:
+      mode: public
+  - type: network.apply
+    network_id: stub
+  - type: audio.start_recording
+  - type: platform.enter
+    params:
+      tone_name: ''
+  - type: audio.wait_for_speech
+    timeout_ms: 30000
+    silence_duration_ms: 1500
+    description: Wait for agent greeting
+  - type: control.for_each
+    items:
+      - {question_id: en_question1, material_id: en_LongWordswav1}
+      - {question_id: en_question2, material_id: en_LongWordswav2}
+      - {question_id: en_question3, material_id: en_LongWordswav3}
+    steps:
+      - type: audio.play
+        corpus_id: ${item.question_id}
+        description: Play question (user asks)
+      - type: audio.wait_for_speech_start
+        timeout_ms: 15000
+        wait_after_start_ms: 2000
+        description: Wait for agent to start speaking, then 2s before interrupt
+      - type: audio.play
+        corpus_id: ${item.material_id}
+        description: Play LongWord material as interrupt
+      - type: audio.wait_for_speech
+        end_timeout_ms: 40000
+        silence_duration_ms: 1000
+        description: Wait for agent response to interruption
+  - type: control.log
+    message: Interrupt I06 (en) completed.
+  - type: audio.stop_recording
+  - type: platform.exit
+  - type: network.restore
+    network_id: stub

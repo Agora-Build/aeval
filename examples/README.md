@@ -2,70 +2,68 @@
 
 Quick-start examples for running ConvoBench scenarios.
 
-- **Scenario-based** — Full conversation flows (e.g. multi-turn dialogue with tangent and recall).
-- **Capability-focused (MediaLab)** — Each targets one Agent capability (e.g. interruption handling, response quality).
+## Directory Layout
 
----
+- `interrupt/`: interruption capability scenarios
+- `response/`: response capability scenarios
+- `multi_turn_dialogue/`: multi-turn dialogue scenario with tangent and recall
 
-## Scenario-based examples
+## Scenario-Based Example
 
-| Example                                 | Directory              | Description                                                                   |
-|-----------------------------------------|------------------------|-------------------------------------------------------------------------------|
-| Multi-turn dialogue (with interruption) | `multi_turn_dialogue/` | 4-turn conversation: Paris → Louvre → off-topic tangent (WiFi) → resume topic |
+### Multi-turn dialogue (`multi_turn_dialogue/`)
 
-### Multi-turn dialogue with interruption (`multi_turn_dialogue/`)
+A 4-turn conversation example with off-topic interruption and context recall.
 
-A 4-turn **conversation example** that includes an off-topic tangent and context recall:
-
-1. **Turn 1**: General inquiry (Paris travel tips)
-2. **Turn 2**: Follow-up (Louvre tickets)
-3. **Turn 3**: Off-topic tangent (WiFi password) — dialogue continues
-4. **Turn 4**: Apologize and ask to resume previous topic
-
-**Run:**
+Run:
 
 ```bash
 convo-bench run examples/multi_turn_dialogue/scenario.yaml
 ```
 
-**Covers:** multi-turn flow, turn-taking, context maintenance, tangent and recovery.
+## Capability-Focused Examples
 
----
+### Interruption (`interrupt/`)
 
-## Capability-focused examples (MediaLab)
+Includes 7 scenarios:
 
-Each scenario focuses on **one Agent capability** (interruption or response). Uses corpus from `config/corpus` (e.g.
-`convoai.yaml`).
+- `interrupt_I00_en.yaml`
+- `interrupt_I01_en.yaml`
+- `interrupt_I02_en.yaml`
+- `interrupt_I04_en.yaml`
+- `interrupt_I05_en.yaml`
+- `interrupt_I06_en.yaml`
+- `interrupt_I07_en.yaml`
 
-| Capability       | Directory             | Scenario files                      |
-|------------------|-----------------------|-------------------------------------|
-| **Interruption** | `medialab/interrupt/` | `interrupt_I00_en.yaml` … (7 files) |
-| **Response**     | `medialab/response/`  | `response_R00_en.yaml` … (11 files) |
-
-**Run (examples):**
+Run:
 
 ```bash
-# Single capability: interruption (e.g. I00 = Quiet-Nonsemantic)
-convo-bench run examples/medialab/interrupt/interrupt_I00_en.yaml
-
-# Single capability: response (e.g. R00 = Quiet-Question, 1 round)
-convo-bench run examples/medialab/response/response_R00_en.yaml
+convo-bench run examples/interrupt/interrupt_I00_en.yaml
 ```
 
----
+### Response (`response/`)
 
-## Running examples
+Includes 10 scenarios:
 
-- **Scenario-based:** one directory → one main scenario, e.g.
-  `convo-bench run examples/multi_turn_dialogue/scenario.yaml`
-- **MediaLab:** one scenario per capability variant, e.g.
-  `convo-bench run examples/medialab/interrupt/interrupt_I02_en.yaml`
+- `response_R00_en.yaml`
+- `response_R01_en.yaml`
+- `response_R02_en.yaml`
+- `response_R03_en.yaml`
+- `response_R04_en.yaml`
+- `response_R13_en.yaml`
+- `response_R14_en.yaml`
+- `response_R15_en.yaml`
+- `response_R16_en.yaml`
+- `response_R17_en.yaml`
 
-## Adding your own examples
+Run:
 
-1. Create a new directory under `examples/` (e.g. `examples/my_example/`).
-2. Add `scenario.yaml` (and optionally an `audio/` subdirectory for WAV files).
-3. Use paths relative to the scenario file or `corpus_id` / `corpus_set` from config.
-4. Add a short entry in the table above and a subsection if needed.
+```bash
+convo-bench run examples/response/response_R00_en.yaml
+```
 
-See existing examples for reference.
+## Adding Your Own Example
+
+1. Create a new directory under `examples/`.
+2. Add `scenario.yaml` (and optional `audio/` files).
+3. Use paths relative to the scenario file or configured corpus IDs.
+4. Add an entry to this README.

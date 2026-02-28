@@ -43,8 +43,3 @@ Run commands:
 ./aeval run examples/response/response_R00_en.yaml --headful
 ./aeval run examples/multi_turn_dialogue/scenario.yaml --headful
 ```
-
-## Notes
-
-- This public repo is for binaries + examples. It is not the full `convo-bench` source repository.
-- Use `aeval` commands (not `convo-bench`) in this repo.

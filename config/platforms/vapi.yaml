@@ -1,0 +1,220 @@
+---
+# Vapi Platform Configuration
+#
+# Platform: Vapi.ai Voice AI Platform
+# URL: https://vapi.ai/
+# Authentication: Optional (public demo available)
+#
+# Setup Modes:
+#   - public: Public demo (no login required)
+#   - storage: Use saved storage state
+#   - account: Google account login
+#   - manual: Manual login in browser window
+#
+# Note: assistant_id is UUID, not display name
+name: vapi
+description: Vapi.ai Voice AI Platform
+config:
+  url: https://vapi.ai/
+  dashboard_url: https://dashboard.vapi.ai/
+  assistants_url: https://dashboard.vapi.ai/assistants
+auth:
+  default_mode: auto
+  auto_fallback: [storage, account, public]
+actions:
+  # ==========================================================================
+  # Setup Actions (Authentication)
+  # ==========================================================================
+
+  # Public Mode: No login required (default)
+  setup:public:
+    - type: browser.navigate
+      url: ${config.url}
+    - type: control.sleep
+      duration: 3000
+    - type: control.log
+      message: Vapi setup completed (public mode)
+
+  # Storage Mode: Use saved storage state
+  setup:storage:
+    - type: browser.navigate
+      url: ${config.dashboard_url}
+    - type: control.sleep
+      duration: 2000
+    - type: browser.load_storage_state
+      file: ${params.storage_file}
+    - type: control.log
+      message: Storage state loaded, refreshing page...
+    - type: browser.refresh
+      timeout_ms: 30000
+    - type: control.sleep
+      duration: 5000
+    - type: browser.wait_for_element
+      selector: text=Assistants
+      timeout_ms: 10000
+    - type: control.log
+      message: Login verified, navigating to assistant...
+    - type: browser.navigate
+      url: ${config.assistants_url}/${params.assistant_id}
+    - type: control.sleep
+      duration: 5000
+    - type: browser.click
+      selector: button[aria-label='Close']
+      timeout_ms: 3000
+      required: false
+    - type: control.sleep
+      duration: 2000
+    - type: browser.wait_for_element
+      selector: text=Talk to Assistant
+      timeout_ms: 30000
+    - type: control.log
+      message: 'Vapi setup completed (storage mode), assistant: ${params.assistant_id}'
+
+  # Account Mode: Google account login
+  setup:account:
+    - type: control.log
+      message: Navigating to dashboard...
+    - type: browser.navigate
+      url: ${config.dashboard_url}
+    - type: control.sleep
+      duration: 5000
+    - type: control.log
+      message: Clicking Google login button...
+    - type: browser.click
+      selector: //button[contains(., 'Google')]
+      timeout_ms: 15000
+    - type: control.sleep
+      duration: 5000
+    - type: control.log
+      message: Starting Google login flow...
+    - type: browser.fill
+      selector: '#identifierId'
+      value: ${params.email}
+      timeout_ms: 15000
+    - type: control.log
+      message: 'Email filled: ${params.email}'
+    - type: control.sleep
+      duration: 1000
+    - type: browser.click
+      selector: '#identifierNext'
+      timeout_ms: 15000
+    - type: control.log
+      message: Clicked Next, waiting for password page...
+    - type: control.sleep
+      duration: 8000
+    - type: browser.fill
+      selector: input[name='Passwd']
+      value: ${params.password}
+      timeout_ms: 15000
+    - type: control.log
+      message: Password filled
+    - type: control.sleep
+      duration: 1000
+    - type: browser.click
+      selector: '#passwordNext'
+      timeout_ms: 15000
+    - type: control.sleep
+      duration: 5000
+    - type: browser.wait_for_url
+      pattern: '**/dashboard.vapi.ai/**'
+      timeout_ms: 60000
+    - type: control.sleep
+      duration: 3000
+    - type: control.log
+      message: Login successful, entered dashboard
+    - type: browser.wait_for_element
+      selector: text=Assistants
+      timeout_ms: 10000
+    - type: browser.click
+      selector: button[aria-label='Close']
+      timeout_ms: 5000
+      required: false
+    - type: control.sleep
+      duration: 1000
+    - type: browser.navigate
+      url: ${config.assistants_url}/${params.assistant_id}
+    - type: control.sleep
+      duration: 5000
+    - type: browser.save_storage_state
+      file: ${params.storage_file}
+    - type: control.log
+      message: 'Vapi setup completed (account mode), assistant: ${params.assistant_id}'
+
+  # Manual Mode: User completes login manually
+  setup:manual:
+    - type: browser.navigate
+      url: ${config.url}
+    - type: control.sleep
+      duration: 3000
+    - type: control.log
+      message: ⏸️  Please complete login in the browser window
+    - type: control.log
+      message: Waiting for login completion (redirect to dashboard)...
+    # Wait for successful login (redirect to dashboard)
+    - type: browser.wait_for_url
+      pattern: '**/dashboard.vapi.ai/**'
+      timeout_ms: 300000
+    - type: control.sleep
+      duration: 3000
+    # Verify dashboard loaded (Assistants menu should appear)
+    - type: browser.wait_for_element
+      selector: text=Assistants
+      timeout_ms: 30000
+    - type: control.log
+      message: ✅ Login detected (dashboard loaded), saving state...
+    # Close any popup if present
+    - type: browser.click
+      selector: button[aria-label='Close']
+      timeout_ms: 5000
+      required: false
+    - type: control.sleep
+      duration: 1000
+    # Save storage state
+    - type: browser.save_storage_state
+      file: ${params.storage_file}
+    - type: control.log
+      message: ✅ Storage state saved
+
+  # ==========================================================================
+  # Conversation Actions
+  # ==========================================================================
+
+  # Enter: Public demo (default)
+  enter:
+    - type: browser.click
+      selector: text=Talk to vapi
+      timeout_ms: 15000
+    - type: control.sleep
+      duration: 3000
+    - type: control.log
+      message: Vapi conversation started (public demo)
+
+  # Enter: Private agent
+  enter:private:
+    - type: browser.click
+      selector: text=Talk to Assistant
+      timeout_ms: 15000
+    - type: control.sleep
+      duration: 3000
+    - type: control.log
+      message: Vapi conversation started (private agent)
+
+  # Exit: End conversation (public demo)
+  exit:
+    - type: browser.click
+      selector: text=Just talk!
+      timeout_ms: 10000
+    - type: control.sleep
+      duration: 2000
+    - type: control.log
+      message: Vapi conversation ended
+
+  # Exit: End conversation (private agent)
+  exit:private:
+    - type: browser.click
+      selector: text=End Call
+      timeout_ms: 10000
+    - type: control.sleep
+      duration: 2000
+    - type: control.log
+      message: Vapi conversation ended (private agent)

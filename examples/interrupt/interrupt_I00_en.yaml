@@ -1,6 +1,10 @@
 ---
 name: interrupt_I00_en
 description: Quiet-Nonsemantic (medialab I00) - Rate, 1 pair (English)
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: medialab.html.jinja2
 params:
   output_dir: temp/output
   network: {NETWORK: [UC: '306']}

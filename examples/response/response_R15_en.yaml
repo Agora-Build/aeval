@@ -2,6 +2,10 @@
 name: response_R15_en
 description: Quiet-CompleteMeaning_SlowSpeech (medialab R15) - 30 com_slowspeech materials
   (English)
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: medialab.html.jinja2
 params:
   output_dir: temp/output
 steps:

@@ -1,6 +1,10 @@
 ---
 name: interrupt_I06_en
 description: Quiet-Delay-DL (medialab I06) - Delay, 30 pairs, downlink (English)
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: medialab.html.jinja2
 params:
   output_dir: temp/output
   network: {NETWORK: [DC: '40112']}

@@ -1,6 +1,10 @@
 ---
 name: response_R02_en
 description: Quiet-Question-UL (medialab R02) - 30 questions, uplink network (English)
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: medialab.html.jinja2
 params:
   output_dir: temp/output
   network: {NETWORK: [UC: '40112']}

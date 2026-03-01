@@ -1,0 +1,136 @@
+---
+# ElevenLabs Platform Configuration
+#
+# Platform: ElevenLabs (11.ai)
+# Authentication: Required (email/password or storage state)
+#
+# Setup Modes:
+#   - storage: Use saved storage state (fastest)
+#   - account: Login with email and password
+#   - manual: Manual login in browser window
+#
+# Note: CAPTCHA may appear during account login. Use manual mode if needed.
+name: elevenlabs
+description: ElevenLabs AI Voice Conversation Platform
+config:
+  url: https://11.ai/app/home
+  sign_in_url: https://11.ai/app/sign-in
+auth:
+  default_mode: auto
+  auto_fallback: [storage, account, manual]
+actions:
+  # ==========================================================================
+  # Setup Actions (Authentication)
+  # ==========================================================================
+
+  # Storage Mode: Use saved storage state (fastest)
+  setup:storage:
+    - type: browser.navigate
+      url: ${config.url}
+    - type: control.sleep
+      duration: 3000
+    - type: browser.load_storage_state
+      file: ${params.storage_file}
+    - type: browser.refresh
+      timeout_ms: 30000
+    - type: control.sleep
+      duration: 5000
+    - type: browser.wait_for_url
+      pattern: ${config.url}
+      timeout_ms: 10000
+    - type: control.log
+      message: ElevenLabs setup completed (storage mode)
+
+  # Account Mode: Login with email and password
+  setup:account:
+    - type: browser.navigate
+      url: ${config.sign_in_url}
+    - type: control.sleep
+      duration: 3000
+    - type: browser.fill
+      selector: input[data-testid='sign-in-email-input']
+      value: ${params.email}
+      timeout_ms: 10000
+    - type: browser.fill
+      selector: input[data-testid='sign-in-password-input']
+      value: ${params.password}
+      timeout_ms: 10000
+    - type: control.sleep
+      duration: 1000
+    - type: browser.click
+      selector: button[data-testid='sign-in-submit-button']
+      timeout_ms: 10000
+    - type: browser.wait_for_url
+      pattern: '**/app/home**'
+      timeout_ms: 60000
+    - type: control.sleep
+      duration: 3000
+    - type: browser.save_storage_state
+      file: ${params.storage_file}
+    - type: control.log
+      message: ElevenLabs setup completed (account mode)
+
+  # Manual Mode: User completes login manually
+  setup:manual:
+    - type: browser.navigate
+      url: ${config.sign_in_url}
+    - type: control.sleep
+      duration: 3000
+    - type: control.log
+      message: ⏸️  Please complete login in the browser window
+    - type: control.log
+      message: Waiting for login completion (redirect to home page)...
+    # Wait for successful login (redirect to home page)
+    - type: browser.wait_for_url
+      pattern: '**/app/home**'
+      timeout_ms: 300000
+    - type: control.log
+      message: ✅ Login detected (redirected to home), saving state...
+    - type: control.sleep
+      duration: 3000
+    - type: browser.save_storage_state
+      file: ${params.storage_file}
+    - type: control.log
+      message: ✅ Storage state saved
+
+  # ==========================================================================
+  # Conversation Actions
+  # ==========================================================================
+
+  # Enter: Start conversation with default agent
+  enter:
+    - type: browser.click
+      selector: button:has-text('Start a call')
+      timeout_ms: 10000
+    - type: control.sleep
+      duration: 3000
+    - type: control.log
+      message: ElevenLabs conversation started
+
+  # Enter with agent selection
+  enter:select_agent:
+    - type: browser.click
+      selector: button[aria-label='Agent selection']
+      timeout_ms: 10000
+    - type: control.sleep
+      duration: 1000
+    - type: browser.click
+      selector: //div[@role='menuitem'][contains(., '${params.agent_name}')]
+      timeout_ms: 10000
+    - type: control.sleep
+      duration: 2000
+    - type: browser.click
+      selector: button:has-text('Start a call')
+      timeout_ms: 10000
+    - type: control.log
+      message: 'ElevenLabs conversation started with agent: ${params.agent_name}'
+
+  # Exit: End conversation
+  exit:
+    - type: browser.click
+      selector: button:has(svg.lucide-phone-off)
+      timeout_ms: 10000
+    - type: control.sleep
+      duration: 2000
+    - type: control.log
+      message: ElevenLabs conversation ended

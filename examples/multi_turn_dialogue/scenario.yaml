@@ -3,6 +3,10 @@ name: LiveKit multi-turn dialogue (with interruption)
 description: Multi-turn conversation example that includes an interruption and context
   recall; not a dedicated interruption test.
 # Analysis configuration
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: default.html.jinja2
 params:
   output_dir: temp/output
 steps:

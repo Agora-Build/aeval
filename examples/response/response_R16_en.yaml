@@ -2,6 +2,10 @@
 name: response_R16_en
 description: Quiet-UnCompleteMeaning_NormalSpeech (medialab R16) - 30 uncom_normal
   materials (English)
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: medialab.html.jinja2
 params:
   output_dir: temp/output
 steps:

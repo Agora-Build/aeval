@@ -2,6 +2,10 @@
 name: response_R17_en
 description: Quiet-UnCompleteMeaning_SlowSpeech (medialab R17) - 30 uncom_slowspeech
   materials (English)
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: medialab.html.jinja2
 params:
   output_dir: temp/output
 steps:

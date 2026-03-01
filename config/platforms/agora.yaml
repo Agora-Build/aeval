@@ -1,0 +1,235 @@
+---
+# Agora Platform Configuration
+#
+# Platform: Agora Conversational AI (International)
+# URL: https://conversational-ai.agora.io/
+# Authentication: Required (email/password or storage state)
+#
+# Setup Modes:
+#   - storage: Use saved storage state (fastest)
+#   - account: Login with email and password (SSO)
+#   - manual: Manual login in browser window
+name: agora
+description: Agora Conversational AI (International)
+config:
+  home_url: https://conversational-ai.agora.io/
+  sso_login_url: https://sso2.agora.io/_/login  # May vary by language (/_/login, /en/login, etc.)
+auth:
+  default_mode: auto
+  auto_fallback: [storage, account, manual]
+# Platform actions
+actions:
+  # ========== Setup Actions ==========
+  # Setup (Default): Email/password login (SSO)
+  setup:account:
+    # 1. Navigate to home page
+    - type: browser.navigate
+      url: ${config.home_url}
+      wait_until: load
+
+    # 2. Wait for page to fully initialize
+    - type: control.sleep
+      duration: 3000
+
+    # 3. Click "Log in or Sign up" button
+    - type: browser.click
+      selector: button:has-text('Log in or Sign up')
+      timeout_ms: 10000
+
+    # 4. Wait for popup content to load
+    - type: control.sleep
+      duration: 2000
+
+    # 5. Agree to privacy policy popup
+    - type: browser.click
+      selector: button:has-text('Agree')
+      timeout_ms: 10000
+
+    # 6. Wait for agreement form to load
+    - type: control.sleep
+      duration: 1000
+
+    # 7. Ensure agreement checkbox is checked
+    - type: browser.set_checkbox
+      selector: button[role='checkbox'][id='terms']
+      checked: true
+      timeout_ms: 10000
+
+    # 8. Click login button to enter SSO page
+    - type: browser.click
+      selector: button:has-text('Log in with Agora account')
+      timeout_ms: 10000
+
+    # 9. Wait for SSO page to load (use element detection instead of URL)
+    - type: control.sleep
+      duration: 3000
+
+    # 10. Fill email
+    - type: browser.fill
+      selector: input.input-text[placeholder='Email']
+      value: ${params.email}
+      timeout_ms: 10000
+
+    # 11. Fill password
+    - type: browser.fill
+      selector: input.input-text[placeholder='Password']
+      value: ${params.password}
+      timeout_ms: 10000
+    - type: control.sleep
+      duration: 1000
+
+    # 12. Wait for login button to become enabled
+    - type: browser.wait_for_element
+      selector: button.sso-button:has-text('Login'):not([disabled])
+      state: visible
+      timeout_ms: 10000
+
+    # 13. Submit login form
+    - type: browser.click
+      selector: button.sso-button:has-text('Login')
+
+    # 14. Wait for redirect back to home page
+    - type: browser.wait_for_url
+      pattern: ${config.home_url}
+      timeout_ms: 60000
+
+    # 15. Wait for page to fully load and stabilize
+    - type: control.sleep
+      duration: 3000
+
+    # 16. Save storage state
+    - type: browser.save_storage_state
+      file: ${params.storage_file}
+    - type: control.log
+      message: Agora setup completed (account mode)
+
+  # Setup (Storage State Mode): Use saved storage state to login
+  setup:storage:
+    # 1. Navigate to home page
+    - type: browser.navigate
+      url: ${config.home_url}
+      wait_until: load
+
+    # 2. Wait for initial page load
+    - type: control.sleep
+      duration: 2000
+
+    # 3. Load storage state
+    - type: browser.load_storage_state
+      file: ${params.storage_file}
+
+    # 4. Refresh page to apply login state
+    - type: browser.refresh
+      timeout_ms: 30000
+
+    # 5. Wait for page to fully load after refresh
+    - type: control.sleep
+      duration: 3000
+
+    # 6. Verify login state
+    - type: browser.wait_for_url
+      pattern: ${config.home_url}
+      timeout_ms: 10000
+
+    # 7. Close privacy popup if it appears (first time after login)
+    - type: browser.click
+      selector: button:has-text('Agree')
+      timeout_ms: 3000
+      required: false
+    - type: control.log
+      message: Agora setup completed (storage mode)
+
+  # Setup (Manual Mode): User completes login manually
+  setup:manual:
+    # 1. Navigate to home page
+    - type: browser.navigate
+      url: ${config.home_url}
+      wait_until: load
+    - type: control.sleep
+      duration: 3000
+    - type: control.log
+      message: ⏸️  Please complete login in the browser window
+    - type: control.log
+      message: Waiting for login completion (user avatar button should appear)...
+    # 2. Wait for user avatar button (only appears after login)
+    - type: browser.wait_for_element
+      selector: button:has(svg circle[cx="16"])
+      state: visible
+      timeout_ms: 300000
+    - type: control.log
+      message: ✅ Login detected (user avatar appeared), saving state...
+    - type: control.sleep
+      duration: 3000
+    # 3. Save storage state
+    - type: browser.save_storage_state
+      file: ${params.storage_file}
+    - type: control.log
+      message: ✅ Storage state saved
+
+  # ========== Enter Actions ==========
+  # Enter (Default): Use default agent ("Assistant")
+  enter:
+    # Click "Call AI Engine" button
+    - type: browser.click
+      selector: button:has-text('Call AI Engine')
+      timeout_ms: 10000
+
+    # Wait for conversation to establish
+    - type: control.sleep
+      duration: 3000
+    - type: control.log
+      message: Agora conversation started
+
+  # Enter (Select agent mode): Select specified agent
+  enter:select_agent:
+    # Click specified agent
+    - type: browser.click
+      selector: button:has-text('${params.agent_name}')
+      timeout_ms: 10000
+
+    # Click "Call AI Engine" button
+    - type: browser.click
+      selector: button:has-text('Call AI Engine')
+      timeout_ms: 10000
+
+    # Wait for conversation to establish
+    - type: control.sleep
+      duration: 3000
+    - type: control.log
+      message: 'Agora conversation started with agent: ${params.agent_name}'
+
+  # ========== Exit Actions ==========
+  # Exit (Default): Click close button
+  exit:
+    # Wait for close button to be visible and enabled
+    - type: browser.wait_for_element
+      selector: button.text-destructive:has(svg.lucide-x):not([disabled])
+      state: visible
+      timeout_ms: 10000
+
+    # Click close button
+    - type: browser.click
+      selector: button.text-destructive:has(svg.lucide-x)
+      timeout_ms: 10000
+
+    # Wait for conversation to end
+    - type: control.sleep
+      duration: 2000
+    - type: control.log
+      message: Agora conversation ended
+# Available Agents (for reference)
+agents:
+  - name: Assistant
+    description: Default assistant
+  - name: The Astrologer
+    description: Astrology assistant
+  - name: Penny (beta)
+    description: Beta assistant
+  - name: Echo Assistant
+    description: Echo assistant
+  - name: Vision
+    description: Vision assistant
+  - name: Customer Service - Phone In
+    description: Inbound customer service
+  - name: Customer Service - Phone Out
+    description: Outbound customer service

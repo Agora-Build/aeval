@@ -2,6 +2,10 @@
 name: response_R13_en
 description: Quiet-CompleteMeaning_ToneChange (medialab R13) - 30 com_tone materials
   (English)
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: medialab.html.jinja2
 params:
   output_dir: temp/output
 steps:

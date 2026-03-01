@@ -1,6 +1,16 @@
 ---
 name: response_R00_en
 description: Quiet-Question (medialab R00) - 1 question (English)
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: medialab.html.jinja2
+    thresholds:
+      timeout_threshold_ms: 10000
+      min_response_rate: 0.9
+      max_avg_latency_ms: 1200
+      max_timeout_count: 0
+      max_ai_interrupt_count: 0
 params:
   output_dir: temp/output
 steps:

@@ -1,6 +1,10 @@
 ---
 name: interrupt_I07_en
 description: Quiet-Delay-BD (medialab I07) - Delay, 30 pairs, bidirectional (English)
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: medialab.html.jinja2
 params:
   output_dir: temp/output
   network: {NETWORK: [{UC: '40112', DC: '40112'}]}

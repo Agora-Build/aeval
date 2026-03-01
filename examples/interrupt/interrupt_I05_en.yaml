@@ -1,6 +1,10 @@
 ---
 name: interrupt_I05_en
 description: Quiet-Delay-UL (medialab I05) - Delay, 30 pairs, uplink (English)
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: medialab.html.jinja2
 params:
   output_dir: temp/output
   network: {NETWORK: [UC: '40112']}

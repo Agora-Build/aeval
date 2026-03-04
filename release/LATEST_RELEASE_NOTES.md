@@ -1,15 +1,15 @@
 # aeval v0.1.1
 
-Built: 2026-03-03 16:39:57 UTC
+Built: 2026-03-04 00:22:51 UTC
 
 ## Binary Assets
 
 | Asset | SHA256 | Size (bytes) |
 | --- | --- | ---: |
 | aeval-macos-arm64 | 958e6797694a2d11cf2fe283ade35ed3da4992368a46612d4579b675b6629e15 | 239547312 |
-| aeval-macos-x86_64 | 53525942b35f38bb79493f64182fb4c8763a4787cd6ac052906fea9d53a904f1 | 141575424 |
-| aeval-linux-x86_64 | 66aa14a1ab0f7e5f2153f8d3b6ee87fdbc5f2f6582c27435eac19f05f765c149 | 180646504 |
-| aeval-linux-arm64 | 618447154512fabfd342773f6ecfa62b6d1d07be04d0cac6f91924d7b42cfb72 | 174342808 |
+| aeval-macos-x86_64 | 57efd4032e41d37528a100e73cf6cdc42e05c19d6883af25091b70e77fb7e188 | 141586016 |
+| aeval-linux-x86_64 | 0bda288fcd7a9ba248eb2b25f8f3c147916c27124707c8c98aa6ff52068eae43 | 406207696 |
+| aeval-linux-arm64 | 2283a83ee984e283db7fbb86725d03a40eaa9e7578ce9f06031e96345551d0aa | 357502680 |
 
 ## Public Repository Updates
 
@@ -25,6 +25,10 @@ Built: 2026-03-03 16:39:57 UTC
 - macOS x86_64: pass
 - Linux x86_64: pass
 - Linux arm64: pass
+
+## Packaged Binary Validation Status
+
+- Plugin/stage checks on packaged binaries (macOS + Linux): pass
 
 ## Release Scenario Test Status
 

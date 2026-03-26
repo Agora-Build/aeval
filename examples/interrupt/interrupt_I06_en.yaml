@@ -7,14 +7,14 @@ analysis:
     template: medialab.html.jinja2
 params:
   output_dir: temp/output
-  network: {NETWORK: [DC: '40112']}
+  network_id: stub
+  network: { NETWORK: [ DC: 'WIFI_BUSY' ] }
 steps:
   - type: platform.setup
     platform_id: livekit
     params:
       mode: public
   - type: network.apply
-    network_id: stub
   - type: audio.start_recording
   - type: platform.enter
     params:
@@ -25,9 +25,9 @@ steps:
     description: Wait for agent greeting
   - type: control.for_each
     items:
-      - {question_id: en_question1, material_id: en_LongWordswav1}
-      - {question_id: en_question2, material_id: en_LongWordswav2}
-      - {question_id: en_question3, material_id: en_LongWordswav3}
+      - { question_id: en_question1, material_id: en_LongWordswav1 }
+      - { question_id: en_question2, material_id: en_LongWordswav2 }
+      - { question_id: en_question3, material_id: en_LongWordswav3 }
     steps:
       - type: audio.play
         corpus_id: ${item.question_id}
@@ -46,6 +46,5 @@ steps:
   - type: control.log
     message: Interrupt I06 (en) completed.
   - type: audio.stop_recording
-  - type: platform.exit
   - type: network.restore
-    network_id: stub
+  - type: platform.exit

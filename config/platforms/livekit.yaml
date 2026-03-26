@@ -8,7 +8,7 @@
 name: livekit
 description: LiveKit Voice AI Playground (Public Demo)
 config:
-  url: https://livekit.io/
+  url: https://livekit.com/
 auth:
   default_mode: public
   auto_fallback: [public]
@@ -26,7 +26,7 @@ actions:
   # If tone_name is empty, uses platform default
   enter:
     - type: browser.click
-      selector: text=Talk to LiveKit Agent
+      selector: button:has-text('Talk to LiveKit Agent')
       timeout_ms: 10000
     - type: audio.wait_for_speech_start
       timeout_ms: 15000
@@ -47,7 +47,7 @@ actions:
   # Exit: End session
   exit:
     - type: browser.click
-      selector: button:has(img[alt='close'])
+      selector: button[data-variant='destructive']
       timeout_ms: 5000
     - type: control.log
       message: LiveKit session ended

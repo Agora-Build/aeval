@@ -19,11 +19,11 @@ stages:
   # Combines multiple VAD sources for better accuracy
   - stage: vad
     config:
-      # VAD sources to use (events, energy, silero)
+      # VAD sources / evidence signals:
       # - events: Browser-based detection (fast, has speaker info)
-      # - energy: Energy-based detection (simple, good for noise)
+      # - energy: Energy signal (NOT pure voice VAD; use as supporting evidence)
       # - silero: ML-based detection (accurate, CPU intensive)
-      sources: [energy, events]
+      sources: [silero, energy, events]
       # Silero VAD settings (only used if "silero" in sources)
       # silero_threshold: 0.3
       # min_speech_duration_ms: 250
@@ -67,6 +67,20 @@ stages:
       # Tolerance for detecting interruptions (seconds)
       # Speech within this window is considered an interruption
       interruption_tolerance_s: 2.0
+
+      # Ambiguity profile for response classification
+      # - strict: lower false positives, more ambiguous
+      # - balanced: recommended default
+      # - loose: higher coverage, higher false-positive risk
+      ambiguity_profile: balanced
+
+      # The following parameters have sensible defaults and usually don't need
+      # explicit configuration:
+      # overlap_min_ms: 120
+      # backchannel_max_ms: 350
+      # resume_gap_threshold_ms: 500
+      # boundary_merge_gap_ms: 1500
+      # near_simultaneous_ms: 250
 
   # ============================================================================
   # Layer 3: Metrics - Calculate performance metrics

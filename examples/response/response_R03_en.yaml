@@ -7,16 +7,15 @@ analysis:
     template: medialab.html.jinja2
 params:
   output_dir: temp/output
-  network: {NETWORK: [DC: '40112']}
+  network_id: stub
+  network: { NETWORK: [ DC: 'WIFI_BUSY' ] }
 steps:
   - type: platform.setup
     platform_id: livekit
     params:
       mode: public
   - type: network.apply
-    network_id: stub
   - type: network.status
-    network_id: stub
   - type: audio.start_recording
   - type: platform.enter
     params:
@@ -38,6 +37,5 @@ steps:
   - type: control.log
     message: Response R03 (en) corpus loop completed.
   - type: audio.stop_recording
-  - type: platform.exit
   - type: network.restore
-    network_id: stub
+  - type: platform.exit

@@ -38,7 +38,7 @@ steps:
   # Tests: Standard turn-taking
   # ------------------------------------------------------------------
   - type: audio.play
-    file: examples/multi_turn_dialogue/audio/1_paris.wav
+    file: examples/multi_turn_dialogue/audio/1_paris.mp3
     log_event: topic_paris
     description: 'User: Ask for Paris travel tips'
 
@@ -53,7 +53,7 @@ steps:
   # Tests: Context maintenance, VAD endpointing
   # ------------------------------------------------------------------
   - type: audio.play
-    file: examples/multi_turn_dialogue/audio/2_louvre.wav
+    file: examples/multi_turn_dialogue/audio/2_louvre.mp3
     log_event: topic_louvre
     description: 'User: Ask about Louvre reservation'
 
@@ -68,7 +68,7 @@ steps:
   # Dialogue continues with a tangent while agent was still speaking
   # ------------------------------------------------------------------
   - type: audio.play
-    file: examples/multi_turn_dialogue/audio/3_wifi_interrupt.wav
+    file: examples/multi_turn_dialogue/audio/3_wifi_interrupt.mp3
     log_event: topic_wifi
     description: 'User: Ask off-topic question (WiFi password)'
   - type: audio.wait_for_speech
@@ -80,7 +80,7 @@ steps:
   # Step 5: Turn 4 - Resume topic (apologize and recall)
   # ------------------------------------------------------------------
   - type: audio.play
-    file: examples/multi_turn_dialogue/audio/4_recall.wav
+    file: examples/multi_turn_dialogue/audio/4_recall.mp3
     log_event: topic_recall
     description: 'User: Apologize and ask to resume previous topic'
   - type: audio.wait_for_speech

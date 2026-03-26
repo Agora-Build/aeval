@@ -1,0 +1,9 @@
+---
+# Netsimu network backend: applies network simulation via net_simulator CLI.
+# Requires nsimu daemon to be running (nsimu start) before running scenarios with network_id: netsimu.
+name: netsimu
+description: Network simulator backend (nsimu CLI; requires nsimu start)
+backend: netsimu
+config:
+  netns_name: netns_2
+  nsimu_command: nsimu

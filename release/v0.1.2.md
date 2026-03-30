@@ -1,15 +1,15 @@
 # aeval v0.1.2
 
-Built: 2026-03-26 06:23:50 UTC
+Built: 2026-03-30 01:59:36 UTC
 
 ## Binary Assets
 
 | Asset | SHA256 | Size (bytes) |
 | --- | --- | ---: |
-| aeval-macos-arm64 | e9e0dac6da603ae186184299acfb18ab9455b56a22ba848982b7563af8559cf0 | 240082656 |
-| aeval-macos-x86_64 | 9ccaeeeea0d311467e69f5b0662742e2d73335d41ccb8cd7a2f2412d88fdc4cf | 137209008 |
-| aeval-linux-x86_64 | 6cde245e3d80d53bcd6a46aca011bfca4665d2f00a3f131e9f3df747ffa38777 | 408930736 |
-| aeval-linux-arm64 | 4d859184d91df0f3a87315faf22fefeba56dec4ac9df4d64db0ebcab065635b1 | 360387280 |
+| aeval-macos-arm64 | c50dac089ad49bd160ca98fcb1eb852300038460f51221249ce4bb87aecd9b3f | 240082576 |
+| aeval-macos-x86_64 | 4d3f34b6d9490acaf93e3c4d14075347bb3a61231365fc2fb453bae20b5ad340 | 142162000 |
+| aeval-linux-x86_64 | 29272a4f48916192c28f746dfe835391c6a7c11574308012c06a4859252937bd | 407958840 |
+| aeval-linux-arm64 | 5eb7f2929fd2c5d5f505ee06a5e39fcaf14bfdebb4cbddab746255766f8fef9f | 359427640 |
 
 ## Public Repository Updates
 

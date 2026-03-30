@@ -2,7 +2,7 @@
 # LiveKit Platform Configuration
 #
 # Platform: LiveKit Agents Playground
-# URL: https://livekit.com/
+# URL: https://livekit.io/
 # Authentication: Not required (public demo)
 # Available tones: Haley, Samuel, Felicia, Jules, Doug
 name: livekit

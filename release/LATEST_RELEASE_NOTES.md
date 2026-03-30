@@ -1,15 +1,15 @@
 # aeval v0.1.2
 
-Built: 2026-03-30 01:59:36 UTC
+Built: 2026-03-30 17:42:16 UTC
 
 ## Binary Assets
 
 | Asset | SHA256 | Size (bytes) |
 | --- | --- | ---: |
-| aeval-macos-arm64 | c50dac089ad49bd160ca98fcb1eb852300038460f51221249ce4bb87aecd9b3f | 240082576 |
-| aeval-macos-x86_64 | 4d3f34b6d9490acaf93e3c4d14075347bb3a61231365fc2fb453bae20b5ad340 | 142162000 |
-| aeval-linux-x86_64 | 29272a4f48916192c28f746dfe835391c6a7c11574308012c06a4859252937bd | 407958840 |
-| aeval-linux-arm64 | 5eb7f2929fd2c5d5f505ee06a5e39fcaf14bfdebb4cbddab746255766f8fef9f | 359427640 |
+| aeval-macos-arm64 | 0084089f6180f3d8df4be64a76712a9a1695875130cb0b3a37cb077cfa3dbeba | 240081952 |
+| aeval-macos-x86_64 | 3cc48ed35573263140265a220acd8cb8c0688089d7ffec0eaf9d2de7a8d7c44a | 142162688 |
+| aeval-linux-x86_64 | 4b7a129a1553bfd11183db1808cbb6c6831e5d8927a128ec695ea5256e97bd92 | 407958432 |
+| aeval-linux-arm64 | d375414b5f09142610bc6c9ef995964c6fe31035d49a6657c9b8506f00fd07f3 | 359427208 |
 
 ## Public Repository Updates
 
@@ -21,19 +21,19 @@ Built: 2026-03-30 01:59:36 UTC
 
 ## Smoke Test Status
 
-- macOS arm64: pass
-- macOS x86_64: pass
-- Linux x86_64: pass
-- Linux arm64: pass
+- macOS arm64: skipped
+- macOS x86_64: skipped
+- Linux x86_64: skipped
+- Linux arm64: skipped
 
 ## Packaged Binary Validation Status
 
-- Plugin/stage checks on packaged binaries (macOS + Linux): pass
+- Plugin/stage checks on packaged binaries (macOS + Linux): skipped
 
 ## Release Scenario Test Status
 
-- Linux x86_64 examples/config runtime: pass
-- Linux arm64 examples/config runtime: pass
+- Linux x86_64 examples/config runtime: skipped
+- Linux arm64 examples/config runtime: skipped
 
 ## One-Line Install (Latest Release)
 

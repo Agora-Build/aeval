@@ -19,18 +19,19 @@ stages:
   # Combines multiple VAD sources for better accuracy
   - stage: vad
     config:
-      # VAD sources / evidence signals:
-      # - events: Browser-based detection (fast, has speaker info)
-      # - energy: Energy signal (NOT pure voice VAD; use as supporting evidence)
-      # - silero: ML-based detection (accurate, CPU intensive)
-      sources: [silero, energy, events]
-      # Silero VAD settings (only used if "silero" in sources)
-      # silero_threshold: 0.3
-      # min_speech_duration_ms: 250
-      # min_silence_duration_ms: 300
-      # Energy VAD settings
-      # snr_threshold: 5.0
-      # min_duration_ms: 100
+      # Acoustic VAD engine: silero | ten | energy
+      # - silero: ML-based (accurate, requires torch)
+      # - ten: ML-based (accurate, lightweight, no torch)
+      # - energy: Signal-based (fast, less accurate)
+      acoustic: ten
+      # Browser events VAD (provides speaker labels and structure)
+      events: true
+      # Acoustic engine settings (forwarded to the chosen engine)
+      # acoustic_config:
+      #   threshold: 0.5
+      #   min_speech_duration_ms: 250
+      #   min_silence_duration_ms: 100
+      #   speech_pad_ms: 30
   # ============================================================================
   # Layer 2: Analyzers - Process and merge extracted data
   # ============================================================================

@@ -60,33 +60,35 @@ actions:
       selector: button:has-text('Log in with Agora account')
       timeout_ms: 10000
 
-    # 9. Wait for SSO page to load (use element detection instead of URL)
-    - type: control.sleep
-      duration: 3000
+    # 9. Wait for the new SSO form to load
+    - type: browser.wait_for_element
+      selector: input[type='email'][placeholder='Enter email']
+      state: visible
+      timeout_ms: 15000
 
     # 10. Fill email
     - type: browser.fill
-      selector: input.input-text[placeholder='Email']
+      selector: input[type='email'][placeholder='Enter email']
       value: ${params.email}
-      timeout_ms: 10000
+      timeout_ms: 15000
 
     # 11. Fill password
     - type: browser.fill
-      selector: input.input-text[placeholder='Password']
+      selector: input[type='password'][placeholder='Enter password']
       value: ${params.password}
-      timeout_ms: 10000
+      timeout_ms: 15000
     - type: control.sleep
       duration: 1000
 
-    # 12. Wait for login button to become enabled
+    # 12. Wait for sign-in button to become enabled
     - type: browser.wait_for_element
-      selector: button.sso-button:has-text('Login'):not([disabled])
+      selector: button:has-text('Sign In'):not([disabled])
       state: visible
-      timeout_ms: 10000
+      timeout_ms: 15000
 
-    # 13. Submit login form
+    # 13. Submit sign-in form
     - type: browser.click
-      selector: button.sso-button:has-text('Login')
+      selector: button:has-text('Sign In')
 
     # 14. Wait for redirect back to home page
     - type: browser.wait_for_url

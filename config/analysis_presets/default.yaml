@@ -27,8 +27,8 @@ stages:
       # Browser events VAD (provides speaker labels and structure)
       events: true
       # Acoustic engine settings (forwarded to the chosen engine)
-      # acoustic_config:
-      #   threshold: 0.5
+      acoustic_config:
+        threshold: 0.6
       #   min_speech_duration_ms: 0
       #   min_silence_duration_ms: 100
       #   speech_pad_ms: 30
@@ -62,9 +62,6 @@ stages:
   # A "turn" is a complete exchange (user speaks, agent responds)
   - stage: turn_segmenter
     config:
-      # How long to wait before considering agent's response complete (seconds)
-      response_timeout_s: 5.0
-
       # Tolerance for detecting interruptions (seconds)
       # Speech within this window is considered an interruption
       interruption_tolerance_s: 2.0

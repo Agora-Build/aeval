@@ -130,6 +130,7 @@ actions:
     - type: browser.click
       selector: button:has(svg.lucide-phone-off)
       timeout_ms: 10000
+      force: true
     - type: control.sleep
       duration: 2000
     - type: control.log

@@ -1,0 +1,37 @@
+# Analysis preset for INT_FALSE (false interrupt / nonsemantic) lab case.
+# Agent speech gaps up to 1500ms are merged into the same turn,
+# preventing natural pauses from being misclassified as interruptions.
+cache: true
+parallel: false
+stages:
+  - stage: events
+    config: {}
+  - stage: vad
+    config:
+      acoustic: ten
+      events: true
+      acoustic_config:
+        threshold: 0.6
+  - stage: vad_merger
+    config:
+      merge_strategy: union
+      min_gap_ms: 100
+  - stage: stt
+    config:
+      provider: whisper
+      language: ''
+  - stage: turn_segmenter
+    config:
+      interruption_tolerance_s: 2.0
+      ambiguity_profile: balanced
+      resume_gap_threshold_ms: 1500  # wider than default 500ms for nonsemantic interrupts
+  - stage: metrics_calculator
+    config: {}
+  - stage: html_reporter
+    config:
+      template: medialab.html.jinja2
+      output: report.html
+  - stage: json_exporter
+    config:
+      pretty: true
+      output: metrics.json

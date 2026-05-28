@@ -1,0 +1,141 @@
+name: turn_taking_en_INT_BASIC_chunk_002
+description: turn_taking_en INT_BASIC chunk_002
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: medialab.html.jinja2
+params:
+  lab:
+    suite: turn_taking_en
+    case_id: INT_BASIC
+    chunk_id: chunk_002
+    sample_ids:
+    - INT_BASIC-006
+    - INT_BASIC-007
+    - INT_BASIC-008
+    - INT_BASIC-009
+    - INT_BASIC-010
+steps:
+- type: platform.setup
+  platform_id: livekit
+  params: {}
+- type: audio.start_recording
+- type: platform.enter
+  params:
+    tone_name: ''
+- type: audio.wait_for_speech
+  timeout_ms: 30000
+  silence_duration_ms: 3000
+  description: Wait for agent greeting
+- type: lab.trace
+  event: case_sample_start
+  suite: turn_taking_en
+  case_id: INT_BASIC
+  sample_id: INT_BASIC-006
+  sample_index: 6
+  question_id: en_question1
+  material_id: en_LongWordswav1
+- type: audio.play
+  file: corpus/turn_taking/en/audio/en_question1.wav
+  description: INT_BASIC-006 question
+- type: audio.wait_for_speech_start
+  timeout_ms: 15000
+  wait_after_start_ms: 2000
+  description: INT_BASIC-006 agent start before material
+- type: audio.play
+  file: corpus/turn_taking/en/audio/en_LongWordswav1.wav
+  description: INT_BASIC-006 material
+- type: audio.wait_for_speech
+  end_timeout_ms: 40000
+  silence_duration_ms: 3000
+  description: INT_BASIC-006 post-material response
+- type: lab.trace
+  event: case_sample_start
+  suite: turn_taking_en
+  case_id: INT_BASIC
+  sample_id: INT_BASIC-007
+  sample_index: 7
+  question_id: en_question4
+  material_id: en_LongWordswav4
+- type: audio.play
+  file: corpus/turn_taking/en/audio/en_question4.wav
+  description: INT_BASIC-007 question
+- type: audio.wait_for_speech_start
+  timeout_ms: 15000
+  wait_after_start_ms: 2000
+  description: INT_BASIC-007 agent start before material
+- type: audio.play
+  file: corpus/turn_taking/en/audio/en_LongWordswav4.wav
+  description: INT_BASIC-007 material
+- type: audio.wait_for_speech
+  end_timeout_ms: 40000
+  silence_duration_ms: 3000
+  description: INT_BASIC-007 post-material response
+- type: lab.trace
+  event: case_sample_start
+  suite: turn_taking_en
+  case_id: INT_BASIC
+  sample_id: INT_BASIC-008
+  sample_index: 8
+  question_id: en_question5
+  material_id: en_LongWordswav5
+- type: audio.play
+  file: corpus/turn_taking/en/audio/en_question5.wav
+  description: INT_BASIC-008 question
+- type: audio.wait_for_speech_start
+  timeout_ms: 15000
+  wait_after_start_ms: 2000
+  description: INT_BASIC-008 agent start before material
+- type: audio.play
+  file: corpus/turn_taking/en/audio/en_LongWordswav5.wav
+  description: INT_BASIC-008 material
+- type: audio.wait_for_speech
+  end_timeout_ms: 40000
+  silence_duration_ms: 3000
+  description: INT_BASIC-008 post-material response
+- type: lab.trace
+  event: case_sample_start
+  suite: turn_taking_en
+  case_id: INT_BASIC
+  sample_id: INT_BASIC-009
+  sample_index: 9
+  question_id: en_question6
+  material_id: en_LongWordswav6
+- type: audio.play
+  file: corpus/turn_taking/en/audio/en_question6.wav
+  description: INT_BASIC-009 question
+- type: audio.wait_for_speech_start
+  timeout_ms: 15000
+  wait_after_start_ms: 2000
+  description: INT_BASIC-009 agent start before material
+- type: audio.play
+  file: corpus/turn_taking/en/audio/en_LongWordswav6.wav
+  description: INT_BASIC-009 material
+- type: audio.wait_for_speech
+  end_timeout_ms: 40000
+  silence_duration_ms: 3000
+  description: INT_BASIC-009 post-material response
+- type: lab.trace
+  event: case_sample_start
+  suite: turn_taking_en
+  case_id: INT_BASIC
+  sample_id: INT_BASIC-010
+  sample_index: 10
+  question_id: en_question7
+  material_id: en_LongWordswav7
+- type: audio.play
+  file: corpus/turn_taking/en/audio/en_question7.wav
+  description: INT_BASIC-010 question
+- type: audio.wait_for_speech_start
+  timeout_ms: 15000
+  wait_after_start_ms: 2000
+  description: INT_BASIC-010 agent start before material
+- type: audio.play
+  file: corpus/turn_taking/en/audio/en_LongWordswav7.wav
+  description: INT_BASIC-010 material
+- type: audio.wait_for_speech
+  end_timeout_ms: 40000
+  silence_duration_ms: 3000
+  description: INT_BASIC-010 post-material response
+- type: audio.stop_recording
+- type: platform.exit

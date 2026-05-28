@@ -1,0 +1,141 @@
+name: turn_taking_en_INT_FALSE_chunk_002
+description: turn_taking_en INT_FALSE chunk_002
+analysis:
+  preset: config/analysis_presets/lab_int_false.yaml
+  report:
+    template: medialab.html.jinja2
+params:
+  lab:
+    suite: turn_taking_en
+    case_id: INT_FALSE
+    chunk_id: chunk_002
+    sample_ids:
+    - INT_FALSE-006
+    - INT_FALSE-007
+    - INT_FALSE-008
+    - INT_FALSE-009
+    - INT_FALSE-010
+steps:
+- type: platform.setup
+  platform_id: livekit
+  params: {}
+- type: audio.start_recording
+- type: platform.enter
+  params:
+    tone_name: ''
+- type: audio.wait_for_speech
+  timeout_ms: 30000
+  silence_duration_ms: 3000
+  description: Wait for agent greeting
+- type: lab.trace
+  event: case_sample_start
+  suite: turn_taking_en
+  case_id: INT_FALSE
+  sample_id: INT_FALSE-006
+  sample_index: 6
+  question_id: en_question12
+  material_id: sound_NonsemanticCoughLaughterwav12
+- type: audio.play
+  file: corpus/turn_taking/en/audio/en_question12.wav
+  description: INT_FALSE-006 question
+- type: audio.wait_for_speech_start
+  timeout_ms: 15000
+  wait_after_start_ms: 1000
+  description: INT_FALSE-006 agent start before material
+- type: audio.play
+  file: corpus/turn_taking/en/audio/NonsemanticCoughLaughterwav12.wav
+  description: INT_FALSE-006 material
+- type: audio.wait_for_speech
+  end_timeout_ms: 40000
+  silence_duration_ms: 3000
+  description: INT_FALSE-006 post-material response
+- type: lab.trace
+  event: case_sample_start
+  suite: turn_taking_en
+  case_id: INT_FALSE
+  sample_id: INT_FALSE-007
+  sample_index: 7
+  question_id: en_question17
+  material_id: sound_NonsemanticCoughLaughterwav17
+- type: audio.play
+  file: corpus/turn_taking/en/audio/en_question17.wav
+  description: INT_FALSE-007 question
+- type: audio.wait_for_speech_start
+  timeout_ms: 15000
+  wait_after_start_ms: 1000
+  description: INT_FALSE-007 agent start before material
+- type: audio.play
+  file: corpus/turn_taking/en/audio/NonsemanticCoughLaughterwav17.wav
+  description: INT_FALSE-007 material
+- type: audio.wait_for_speech
+  end_timeout_ms: 40000
+  silence_duration_ms: 3000
+  description: INT_FALSE-007 post-material response
+- type: lab.trace
+  event: case_sample_start
+  suite: turn_taking_en
+  case_id: INT_FALSE
+  sample_id: INT_FALSE-008
+  sample_index: 8
+  question_id: en_question18
+  material_id: sound_NonsemanticCoughLaughterwav18
+- type: audio.play
+  file: corpus/turn_taking/en/audio/en_question18.wav
+  description: INT_FALSE-008 question
+- type: audio.wait_for_speech_start
+  timeout_ms: 15000
+  wait_after_start_ms: 1000
+  description: INT_FALSE-008 agent start before material
+- type: audio.play
+  file: corpus/turn_taking/en/audio/NonsemanticCoughLaughterwav18.wav
+  description: INT_FALSE-008 material
+- type: audio.wait_for_speech
+  end_timeout_ms: 40000
+  silence_duration_ms: 3000
+  description: INT_FALSE-008 post-material response
+- type: lab.trace
+  event: case_sample_start
+  suite: turn_taking_en
+  case_id: INT_FALSE
+  sample_id: INT_FALSE-009
+  sample_index: 9
+  question_id: en_question21
+  material_id: sound_NonsemanticCoughLaughterwav21
+- type: audio.play
+  file: corpus/turn_taking/en/audio/en_question21.wav
+  description: INT_FALSE-009 question
+- type: audio.wait_for_speech_start
+  timeout_ms: 15000
+  wait_after_start_ms: 1000
+  description: INT_FALSE-009 agent start before material
+- type: audio.play
+  file: corpus/turn_taking/en/audio/NonsemanticCoughLaughterwav21.wav
+  description: INT_FALSE-009 material
+- type: audio.wait_for_speech
+  end_timeout_ms: 40000
+  silence_duration_ms: 3000
+  description: INT_FALSE-009 post-material response
+- type: lab.trace
+  event: case_sample_start
+  suite: turn_taking_en
+  case_id: INT_FALSE
+  sample_id: INT_FALSE-010
+  sample_index: 10
+  question_id: en_question22
+  material_id: sound_NonsemanticCoughLaughterwav22
+- type: audio.play
+  file: corpus/turn_taking/en/audio/en_question22.wav
+  description: INT_FALSE-010 question
+- type: audio.wait_for_speech_start
+  timeout_ms: 15000
+  wait_after_start_ms: 1000
+  description: INT_FALSE-010 agent start before material
+- type: audio.play
+  file: corpus/turn_taking/en/audio/NonsemanticCoughLaughterwav22.wav
+  description: INT_FALSE-010 material
+- type: audio.wait_for_speech
+  end_timeout_ms: 40000
+  silence_duration_ms: 3000
+  description: INT_FALSE-010 post-material response
+- type: audio.stop_recording
+- type: platform.exit

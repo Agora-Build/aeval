@@ -1,0 +1,101 @@
+name: turn_taking_en_RSP_BASIC_chunk_002
+description: turn_taking_en RSP_BASIC chunk_002
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: medialab.html.jinja2
+params:
+  lab:
+    suite: turn_taking_en
+    case_id: RSP_BASIC
+    chunk_id: chunk_002
+    sample_ids:
+    - RSP_BASIC-006
+    - RSP_BASIC-007
+    - RSP_BASIC-008
+    - RSP_BASIC-009
+    - RSP_BASIC-010
+steps:
+- type: platform.setup
+  platform_id: livekit
+  params: {}
+- type: audio.start_recording
+- type: platform.enter
+  params:
+    tone_name: ''
+- type: audio.wait_for_speech
+  timeout_ms: 30000
+  silence_duration_ms: 3000
+  description: Wait for agent greeting
+- type: lab.trace
+  event: case_sample_start
+  suite: turn_taking_en
+  case_id: RSP_BASIC
+  sample_id: RSP_BASIC-006
+  sample_index: 6
+  question_id: en_question_short6
+- type: audio.play
+  file: corpus/turn_taking/en/audio/en_question_short6.wav
+  description: RSP_BASIC-006 question
+- type: audio.wait_for_speech
+  end_timeout_ms: 45000
+  silence_duration_ms: 3000
+  description: RSP_BASIC-006 response
+- type: lab.trace
+  event: case_sample_start
+  suite: turn_taking_en
+  case_id: RSP_BASIC
+  sample_id: RSP_BASIC-007
+  sample_index: 7
+  question_id: en_question_short7
+- type: audio.play
+  file: corpus/turn_taking/en/audio/en_question_short7.wav
+  description: RSP_BASIC-007 question
+- type: audio.wait_for_speech
+  end_timeout_ms: 45000
+  silence_duration_ms: 3000
+  description: RSP_BASIC-007 response
+- type: lab.trace
+  event: case_sample_start
+  suite: turn_taking_en
+  case_id: RSP_BASIC
+  sample_id: RSP_BASIC-008
+  sample_index: 8
+  question_id: en_question_short8
+- type: audio.play
+  file: corpus/turn_taking/en/audio/en_question_short8.wav
+  description: RSP_BASIC-008 question
+- type: audio.wait_for_speech
+  end_timeout_ms: 45000
+  silence_duration_ms: 3000
+  description: RSP_BASIC-008 response
+- type: lab.trace
+  event: case_sample_start
+  suite: turn_taking_en
+  case_id: RSP_BASIC
+  sample_id: RSP_BASIC-009
+  sample_index: 9
+  question_id: en_question_short9
+- type: audio.play
+  file: corpus/turn_taking/en/audio/en_question_short9.wav
+  description: RSP_BASIC-009 question
+- type: audio.wait_for_speech
+  end_timeout_ms: 45000
+  silence_duration_ms: 3000
+  description: RSP_BASIC-009 response
+- type: lab.trace
+  event: case_sample_start
+  suite: turn_taking_en
+  case_id: RSP_BASIC
+  sample_id: RSP_BASIC-010
+  sample_index: 10
+  question_id: en_question_short10
+- type: audio.play
+  file: corpus/turn_taking/en/audio/en_question_short10.wav
+  description: RSP_BASIC-010 question
+- type: audio.wait_for_speech
+  end_timeout_ms: 45000
+  silence_duration_ms: 3000
+  description: RSP_BASIC-010 response
+- type: audio.stop_recording
+- type: platform.exit

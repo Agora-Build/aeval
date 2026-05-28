@@ -1,0 +1,31 @@
+name: turn_taking
+language: en
+suite: lab_reference_en
+generated_at: '2026-04-27T10:07:43.430423+00:00'
+source_reference:
+  type: external_reference
+  root: /Users/libin/Work/mediatest-819/corpus/convoAI
+  suite_dir: config/lab/lab_reference_en
+scope:
+  included_case_ids:
+  - R00
+  - R01
+  - R13
+  - R14
+  - R15
+  - R16
+  - R17
+  - I01
+  - I02
+  - I03
+  - I04
+  excluded_case_ids:
+  - R05
+  - R06
+layout:
+  package_root: corpus/turn_taking/en
+  audio_dir: audio
+  files_csv: files.csv
+stats:
+  file_count: 320
+  total_bytes: 181464814

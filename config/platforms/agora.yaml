@@ -219,6 +219,28 @@ actions:
       duration: 2000
     - type: control.log
       message: Agora conversation ended
+
+  # Exit (select_agent mode): same as default exit. The session keeps the mode
+  # set by enter:select_agent, and action lookup is 'action:mode' with no
+  # fallback to the plain action — so this alias is required after entering
+  # with select_agent.
+  exit:select_agent:
+    # Wait for close button to be visible and enabled
+    - type: browser.wait_for_element
+      selector: button.text-destructive:has(svg.lucide-x):not([disabled])
+      state: visible
+      timeout_ms: 10000
+
+    # Click close button
+    - type: browser.click
+      selector: button.text-destructive:has(svg.lucide-x)
+      timeout_ms: 10000
+
+    # Wait for conversation to end
+    - type: control.sleep
+      duration: 2000
+    - type: control.log
+      message: Agora conversation ended
 # Available Agents (for reference)
 agents:
   - name: Assistant

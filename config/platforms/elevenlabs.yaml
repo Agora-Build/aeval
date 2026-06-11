@@ -2,22 +2,24 @@
 # ElevenLabs Platform Configuration
 #
 # Platform: ElevenLabs (11.ai)
-# Authentication: Required (email/password or storage state)
+# Authentication: Optional public demo, or account/storage state for app agents
 #
 # Setup Modes:
 #   - storage: Use saved storage state (fastest)
 #   - account: Login with email and password
+#   - public: Public ElevenAgents demo (no login required)
 #   - manual: Manual login in browser window
 #
 # Note: CAPTCHA may appear during account login. Use manual mode if needed.
 name: elevenlabs
 description: ElevenLabs AI Voice Conversation Platform
 config:
-  url: https://11.ai/app/home
-  sign_in_url: https://11.ai/app/sign-in
+  url: https://elevenlabs.io/app/agents
+  public_url: https://elevenlabs.io/agents
+  sign_in_url: https://elevenlabs.io/app/sign-in?redirect=%2Fapp%2Fagents
 auth:
   default_mode: auto
-  auto_fallback: [storage, account, manual]
+  auto_fallback: [storage, account, public, manual]
 actions:
   # ==========================================================================
   # Setup Actions (Authentication)
@@ -61,7 +63,7 @@ actions:
       selector: button[data-testid='sign-in-submit-button']
       timeout_ms: 10000
     - type: browser.wait_for_url
-      pattern: '**/app/home**'
+      pattern: '**/app/agents**'
       timeout_ms: 60000
     - type: control.sleep
       duration: 3000
@@ -69,6 +71,17 @@ actions:
       file: ${params.storage_file}
     - type: control.log
       message: ElevenLabs setup completed (account mode)
+
+  # Public Mode: Open public ElevenAgents demo (no login required)
+  setup:public:
+    - type: browser.navigate
+      url: ${config.public_url}
+      wait_until: load
+    - type: browser.wait_for_element
+      selector: button:has-text('Talk to an agent')
+      timeout_ms: 30000
+    - type: control.log
+      message: ElevenLabs setup completed (public mode)
 
   # Manual Mode: User completes login manually
   setup:manual:
@@ -79,13 +92,13 @@ actions:
     - type: control.log
       message: ⏸️  Please complete login in the browser window
     - type: control.log
-      message: Waiting for login completion (redirect to home page)...
-    # Wait for successful login (redirect to home page)
+      message: Waiting for login completion (redirect to ElevenAgents app)...
+    # Wait for successful login (redirect to ElevenAgents app)
     - type: browser.wait_for_url
-      pattern: '**/app/home**'
+      pattern: '**/app/agents**'
       timeout_ms: 300000
     - type: control.log
-      message: ✅ Login detected (redirected to home), saving state...
+      message: ✅ Login detected (redirected to ElevenAgents app), saving state...
     - type: control.sleep
       duration: 3000
     - type: browser.save_storage_state
@@ -106,6 +119,27 @@ actions:
       duration: 3000
     - type: control.log
       message: ElevenLabs conversation started
+
+  # Enter: Public demo widget
+  enter:public:
+    - type: browser.click
+      selector: button:has-text('Talk to an agent')
+      timeout_ms: 15000
+    - type: control.sleep
+      duration: 2000
+    - type: browser.click
+      selector: button[aria-label='Start call']
+      timeout_ms: 15000
+    - type: control.sleep
+      duration: 1000
+    - type: browser.click
+      selector: button:has-text('I agree')
+      timeout_ms: 10000
+      required: false
+    - type: control.sleep
+      duration: 5000
+    - type: control.log
+      message: ElevenLabs conversation started (public mode)
 
   # Enter with agent selection
   enter:select_agent:
@@ -135,3 +169,15 @@ actions:
       duration: 2000
     - type: control.log
       message: ElevenLabs conversation ended
+
+  # Exit: End public demo widget call
+  exit:public:
+    - type: browser.click
+      selector: button.tw-size-12.tw-bg-black.tw-text-white
+      timeout_ms: 10000
+      force: true
+    - type: browser.wait_for_element
+      selector: "button:has-text('Talk to an agent'):not(:has-text('Listening')):not(:has-text('Speaking'))"
+      timeout_ms: 15000
+    - type: control.log
+      message: ElevenLabs conversation ended (public mode)

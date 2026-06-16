@@ -144,20 +144,55 @@ actions:
   # Enter with agent selection
   enter:select_agent:
     - type: browser.click
-      selector: button[aria-label='Agent selection']
+      selector: button:visible:has-text('${params.agent_name}')
       timeout_ms: 10000
+    - type: control.sleep
+      duration: 3000
+    - type: browser.click
+      selector: button:has-text('Preview')
+      timeout_ms: 10000
+      required: false
+    - type: control.sleep
+      duration: 5000
+    - type: browser.wait_for_element
+      selector: button[data-agent-id][class*='absolute'][class*='bottom-0'][class*='left-1/2'][class*='rounded-full']
+      timeout_ms: 30000
+      state: visible
     - type: control.sleep
       duration: 1000
     - type: browser.click
-      selector: //div[@role='menuitem'][contains(., '${params.agent_name}')]
+      selector: button[data-agent-id][class*='absolute'][class*='bottom-0'][class*='left-1/2'][class*='rounded-full']
       timeout_ms: 10000
-    - type: control.sleep
-      duration: 2000
-    - type: browser.click
-      selector: button:has-text('Start a call')
-      timeout_ms: 10000
+      force: true
     - type: control.log
       message: 'ElevenLabs conversation started with agent: ${params.agent_name}'
+
+  # Exit: End selected-agent conversation from Preview call mode
+  exit:select_agent:
+    - type: browser.click
+      selector: button[aria-label='End call']
+      timeout_ms: 5000
+      force: true
+      required: false
+    - type: browser.click
+      selector: button[aria-label='End Call']
+      timeout_ms: 5000
+      force: true
+      required: false
+    - type: browser.click
+      selector: button[aria-label='End chat']
+      timeout_ms: 10000
+      force: true
+      required: false
+    - type: browser.click
+      selector: button[data-agent-id][class*='bg-red-500'][class*='rounded-full']
+      timeout_ms: 10000
+      force: true
+      required: false
+    - type: control.sleep
+      duration: 2000
+    - type: control.log
+      message: ElevenLabs conversation ended (selected agent)
 
   # Exit: End conversation
   exit:

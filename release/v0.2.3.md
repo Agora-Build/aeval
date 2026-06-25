@@ -1,6 +1,6 @@
 # aeval v0.2.3
 
-Built: 2026-06-25 23:10:09 UTC
+Built: 2026-06-25 23:53:08 UTC
 
 ## Binary Assets
 
@@ -22,19 +22,19 @@ Built: 2026-06-25 23:10:09 UTC
 
 ## Smoke Test Status
 
-- macOS arm64: pass
-- macOS x86_64: pass
-- Linux x86_64: pass
-- Linux arm64: pass
+- macOS arm64: skipped
+- macOS x86_64: skipped
+- Linux x86_64: skipped
+- Linux arm64: skipped
 
 ## Packaged Binary Validation Status
 
-- Plugin/stage checks on packaged binaries (macOS + Linux): pass
+- Plugin/stage checks on packaged binaries (macOS + Linux): skipped
 
 ## Release Scenario Test Status
 
-- Linux x86_64 examples/config runtime: pass
-- Linux arm64 examples/config runtime: pass
+- Linux x86_64 examples/config runtime: skipped
+- Linux arm64 examples/config runtime: skipped
 
 ## One-Line Install (Latest Release)
 

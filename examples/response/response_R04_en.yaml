@@ -19,8 +19,6 @@ steps:
   - type: network.status
   - type: audio.start_recording
   - type: platform.enter
-    params:
-      tone_name: ''
   - type: audio.wait_for_speech
     timeout_ms: 30000
     silence_duration_ms: 1500

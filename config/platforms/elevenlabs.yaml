@@ -17,9 +17,24 @@ config:
   url: https://elevenlabs.io/app/agents
   public_url: https://elevenlabs.io/agents
   sign_in_url: https://elevenlabs.io/app/sign-in?redirect=%2Fapp%2Fagents
+  agent_url: https://elevenlabs.io/app/agents/agents/agent_6001kadq6pv0f598pjx96ahaxvsq
 auth:
   default_mode: auto
-  auto_fallback: [storage, account, public, manual]
+  auto_fallback: [ storage, account, public, manual ]
+mode_routes:
+  public:
+    setup: public
+    enter: public
+    exit: public
+  account:
+    setup: account
+    enter: agent_url
+  storage:
+    setup: storage
+    enter: agent_url
+  manual:
+    setup: manual
+    enter: select_agent
 actions:
   # ==========================================================================
   # Setup Actions (Authentication)
@@ -29,26 +44,45 @@ actions:
   setup:storage:
     - type: browser.navigate
       url: ${config.url}
+      wait_until: domcontentloaded
+      timeout_ms: 60000
     - type: control.sleep
       duration: 3000
     - type: browser.load_storage_state
       file: ${params.storage_file}
     - type: browser.refresh
-      timeout_ms: 30000
+      timeout_ms: 60000
     - type: control.sleep
       duration: 5000
     - type: browser.wait_for_url
       pattern: ${config.url}
       timeout_ms: 10000
+    - type: browser.click
+      selector: button:has-text('Reject all')
+      timeout_ms: 5000
+      required: false
+    - type: browser.navigate
+      url: ${params.agent_url:-}
+      wait_until: domcontentloaded
+      timeout_ms: 60000
+    - type: browser.wait_for_url
+      pattern: "**/app/agents/agents/**"
+      timeout_ms: 30000
     - type: control.log
       message: ElevenLabs setup completed (storage mode)
 
   # Account Mode: Login with email and password
   setup:account:
     - type: browser.navigate
-      url: ${config.sign_in_url}
-    - type: control.sleep
-      duration: 3000
+      url: ${config.url}
+      wait_until: domcontentloaded
+      timeout_ms: 60000
+    - type: browser.wait_for_url
+      pattern: '**/app/sign-in**'
+      timeout_ms: 60000
+    - type: browser.wait_for_element
+      selector: input[data-testid='sign-in-email-input']
+      timeout_ms: 30000
     - type: browser.fill
       selector: input[data-testid='sign-in-email-input']
       value: ${params.email}
@@ -67,6 +101,17 @@ actions:
       timeout_ms: 60000
     - type: control.sleep
       duration: 3000
+    - type: browser.click
+      selector: button:has-text('Reject all')
+      timeout_ms: 5000
+      required: false
+    - type: browser.navigate
+      url: ${params.agent_url:-}
+      wait_until: domcontentloaded
+      timeout_ms: 60000
+    - type: browser.wait_for_url
+      pattern: "**/app/agents/agents/**"
+      timeout_ms: 30000
     - type: browser.save_storage_state
       file: ${params.storage_file}
     - type: control.log
@@ -77,9 +122,14 @@ actions:
     - type: browser.navigate
       url: ${config.public_url}
       wait_until: load
+      timeout_ms: 60000
     - type: browser.wait_for_element
       selector: button:has-text('Talk to an agent')
-      timeout_ms: 30000
+      timeout_ms: 60000
+    - type: browser.click
+      selector: button:has-text('Reject all')
+      timeout_ms: 5000
+      required: false
     - type: control.log
       message: ElevenLabs setup completed (public mode)
 
@@ -87,6 +137,8 @@ actions:
   setup:manual:
     - type: browser.navigate
       url: ${config.sign_in_url}
+      wait_until: domcontentloaded
+      timeout_ms: 60000
     - type: control.sleep
       duration: 3000
     - type: control.log
@@ -97,6 +149,10 @@ actions:
     - type: browser.wait_for_url
       pattern: '**/app/agents**'
       timeout_ms: 300000
+    - type: browser.click
+      selector: button:has-text('Reject all')
+      timeout_ms: 5000
+      required: false
     - type: control.log
       message: ✅ Login detected (redirected to ElevenAgents app), saving state...
     - type: control.sleep
@@ -110,32 +166,24 @@ actions:
   # Conversation Actions
   # ==========================================================================
 
-  # Enter: Start conversation with default agent
-  enter:
-    - type: browser.click
-      selector: button:has-text('Start a call')
-      timeout_ms: 10000
-    - type: control.sleep
-      duration: 3000
-    - type: control.log
-      message: ElevenLabs conversation started
-
   # Enter: Public demo widget
   enter:public:
     - type: browser.click
       selector: button:has-text('Talk to an agent')
-      timeout_ms: 15000
-    - type: control.sleep
-      duration: 2000
+      timeout_ms: 10000
+    - type: browser.wait_for_element
+      selector: button[aria-label='Start call']
+      timeout_ms: 30000
     - type: browser.click
       selector: button[aria-label='Start call']
-      timeout_ms: 15000
-    - type: control.sleep
-      duration: 1000
+      timeout_ms: 10000
+    - type: browser.wait_for_element
+      selector: button:has-text('I agree')
+      timeout_ms: 30000
     - type: browser.click
       selector: button:has-text('I agree')
       timeout_ms: 10000
-      required: false
+      required: true
     - type: control.sleep
       duration: 5000
     - type: control.log
@@ -144,60 +192,61 @@ actions:
   # Enter with agent selection
   enter:select_agent:
     - type: browser.click
-      selector: button:visible:has-text('${params.agent_name}')
+      selector: "button:visible:has([data-agent-tooltip='${params.agent_name}'])"
+      timeout_ms: 10000
+    - type: browser.wait_for_url
+      pattern: "**/app/agents/agents/**"
+      timeout_ms: 30000
+    - type: browser.wait_for_element
+      selector: "a:has-text('Preview'), button:has-text('Preview')"
+      timeout_ms: 30000
+    - type: browser.click
+      selector: "a:has-text('Preview'), button:has-text('Preview')"
       timeout_ms: 10000
     - type: control.sleep
       duration: 3000
-    - type: browser.click
-      selector: button:has-text('Preview')
-      timeout_ms: 10000
-      required: false
+    - type: browser.wait_for_element
+      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full"
+      timeout_ms: 60000
     - type: control.sleep
       duration: 5000
-    - type: browser.wait_for_element
-      selector: button[data-agent-id][class*='absolute'][class*='bottom-0'][class*='left-1/2'][class*='rounded-full']
-      timeout_ms: 30000
-      state: visible
-    - type: control.sleep
-      duration: 1000
     - type: browser.click
-      selector: button[data-agent-id][class*='absolute'][class*='bottom-0'][class*='left-1/2'][class*='rounded-full']
+      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full"
       timeout_ms: 10000
-      force: true
+    - type: browser.wait_for_element
+      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full.bg-red-500"
+      timeout_ms: 60000
     - type: control.log
       message: 'ElevenLabs conversation started with agent: ${params.agent_name}'
 
-  # Exit: End selected-agent conversation from Preview call mode
-  exit:select_agent:
+  # Enter via direct agent URL
+  enter:agent_url:
+    - type: browser.wait_for_element
+      selector: "a:has-text('Preview'), button:has-text('Preview')"
+      timeout_ms: 30000
     - type: browser.click
-      selector: button[aria-label='End call']
-      timeout_ms: 5000
-      force: true
-      required: false
-    - type: browser.click
-      selector: button[aria-label='End Call']
-      timeout_ms: 5000
-      force: true
-      required: false
-    - type: browser.click
-      selector: button[aria-label='End chat']
+      selector: "a:has-text('Preview'), button:has-text('Preview')"
       timeout_ms: 10000
-      force: true
-      required: false
-    - type: browser.click
-      selector: button[data-agent-id][class*='bg-red-500'][class*='rounded-full']
-      timeout_ms: 10000
-      force: true
-      required: false
     - type: control.sleep
-      duration: 2000
+      duration: 3000
+    - type: browser.wait_for_element
+      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full"
+      timeout_ms: 60000
+    - type: control.sleep
+      duration: 5000
+    - type: browser.click
+      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full"
+      timeout_ms: 10000
+    - type: browser.wait_for_element
+      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full.bg-red-500"
+      timeout_ms: 60000
     - type: control.log
-      message: ElevenLabs conversation ended (selected agent)
+      message: 'ElevenLabs conversation started with direct agent URL'
 
   # Exit: End conversation
   exit:
     - type: browser.click
-      selector: button:has(svg.lucide-phone-off)
+      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full.bg-red-500"
       timeout_ms: 10000
       force: true
     - type: control.sleep
@@ -212,7 +261,7 @@ actions:
       timeout_ms: 10000
       force: true
     - type: browser.wait_for_element
-      selector: "button:has-text('Talk to an agent'):not(:has-text('Listening')):not(:has-text('Speaking'))"
-      timeout_ms: 15000
+      selector: button[aria-label='Start call']
+      timeout_ms: 30000
     - type: control.log
       message: ElevenLabs conversation ended (public mode)

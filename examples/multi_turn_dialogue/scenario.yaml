@@ -21,8 +21,6 @@ steps:
   # START RECORDING before platform.enter (initializes AudioGraph)
   - type: audio.start_recording
   - type: platform.enter
-    params:
-      tone_name: ''  # Empty string triggers auto-skip for tone selection
 
   # ------------------------------------------------------------------
   # Step 1: Initialization

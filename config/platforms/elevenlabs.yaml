@@ -17,7 +17,7 @@ config:
   url: https://elevenlabs.io/app/agents
   public_url: https://elevenlabs.io/agents
   sign_in_url: https://elevenlabs.io/app/sign-in?redirect=%2Fapp%2Fagents
-  agent_url: https://elevenlabs.io/app/agents/agents/agent_6001kadq6pv0f598pjx96ahaxvsq
+  agent_url: https://elevenlabs.io/app/agents/agents/agent_6001kadq6pv0f598pjx96ahaxvsq/preview
 auth:
   default_mode: auto
   auto_fallback: [ storage, account, public, manual ]
@@ -66,7 +66,7 @@ actions:
       wait_until: domcontentloaded
       timeout_ms: 60000
     - type: browser.wait_for_url
-      pattern: "**/app/agents/agents/**"
+      pattern: "**/app/agents/agents/**/preview**"
       timeout_ms: 30000
     - type: control.log
       message: ElevenLabs setup completed (storage mode)
@@ -110,7 +110,7 @@ actions:
       wait_until: domcontentloaded
       timeout_ms: 60000
     - type: browser.wait_for_url
-      pattern: "**/app/agents/agents/**"
+      pattern: "**/app/agents/agents/**/preview**"
       timeout_ms: 30000
     - type: browser.save_storage_state
       file: ${params.storage_file}
@@ -222,24 +222,13 @@ actions:
   # Enter via direct agent URL
   enter:agent_url:
     - type: browser.wait_for_element
-      selector: "a:has-text('Preview'), button:has-text('Preview')"
-      timeout_ms: 30000
-    - type: browser.click
-      selector: "a:has-text('Preview'), button:has-text('Preview')"
-      timeout_ms: 10000
-    - type: control.sleep
-      duration: 3000
-    - type: browser.wait_for_element
-      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full"
+      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto:has(svg path[d^='M3.7489'])"
       timeout_ms: 60000
+    - type: browser.click
+      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto:has(svg path[d^='M3.7489'])"
+      timeout_ms: 10000
     - type: control.sleep
       duration: 5000
-    - type: browser.click
-      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full"
-      timeout_ms: 10000
-    - type: browser.wait_for_element
-      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full.bg-red-500"
-      timeout_ms: 60000
     - type: control.log
       message: 'ElevenLabs conversation started with direct agent URL'
 

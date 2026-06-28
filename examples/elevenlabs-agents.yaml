@@ -1,0 +1,71 @@
+---
+name: elevenlabs_agents_real
+description: Real ElevenLabs Agents smoke scenario for aeval run.
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: medialab.html.jinja2
+params:
+  output_dir: output/elevenlabs-agents
+steps:
+  # Authenticate against the actual preview URL. A URL-only check on /app/agents
+  # can false-positive before ElevenLabs redirects protected preview pages.
+  - type: browser.ensure_authenticated
+    target_url: ${env.ELEVENLABS_AGENT_URL}
+    authenticated_selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto:has(svg path[d^='M3.7489'])"
+    login_url_pattern: "**/app/sign-in**"
+    login_selector: input[data-testid='sign-in-email-input']
+    email_selector: input[data-testid='sign-in-email-input']
+    password_selector: input[data-testid='sign-in-password-input']
+    submit_selector: button[data-testid='sign-in-submit-button']
+    email: ${env.ELEVEN_CONSOLE_EMAIL:-}
+    password: ${env.ELEVEN_CONSOLE_PASSWORD:-}
+    storage_file: ${env.ELEVENLABS_STORAGE_FILE:-.secrets/session/elevenlabs.json}
+    post_login_url_pattern: "**/app/home**"
+    wait_until: domcontentloaded
+    timeout_ms: 60000
+    target_timeout_ms: 60000
+    post_login_timeout_ms: 60000
+
+  - type: browser.click
+    selector: button:has-text('Reject all')
+    timeout_ms: 5000
+    required: false
+
+  - type: audio.start_recording
+    channels: 2
+    sample_rate: 48000
+
+  - type: platform.enter
+    platform_id: elevenlabs
+    mode: agent_url
+    params:
+      agent_url: ${env.ELEVENLABS_AGENT_URL}
+
+  - type: audio.wait_for_speech
+    start_timeout_ms: 30000
+    end_timeout_ms: 60000
+    timeout_ms: 90000
+    pre_silence_ms: 300
+    silence_duration_ms: 3000
+    description: Wait for agent greeting.
+
+  - type: audio.play
+    file: examples/multi_turn_dialogue/audio/1_paris.mp3
+    description: Play one user prompt.
+
+  - type: audio.wait_for_speech
+    start_timeout_ms: 30000
+    end_timeout_ms: 90000
+    timeout_ms: 120000
+    pre_silence_ms: 300
+    silence_duration_ms: 3000
+    description: Wait for agent response.
+
+  - type: audio.stop_recording
+
+  - type: platform.exit
+    platform_id: elevenlabs
+
+  - type: control.log
+    message: ElevenLabs Agents real smoke scenario completed.

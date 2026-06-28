@@ -1,0 +1,46 @@
+---
+name: livekit_agents_real
+description: Real LiveKit public Agents smoke scenario for aeval run.
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: medialab.html.jinja2
+params:
+  output_dir: output/livekit-agents
+steps:
+  - type: platform.setup
+    platform_id: livekit
+    mode: public
+
+  - type: audio.start_recording
+    channels: 2
+    sample_rate: 48000
+
+  - type: platform.enter
+
+  - type: audio.wait_for_speech
+    start_timeout_ms: 30000
+    end_timeout_ms: 60000
+    timeout_ms: 90000
+    pre_silence_ms: 300
+    silence_duration_ms: 3000
+    description: Wait for agent greeting.
+
+  - type: audio.play
+    file: examples/multi_turn_dialogue/audio/1_paris.mp3
+    description: Play one user prompt.
+
+  - type: audio.wait_for_speech
+    start_timeout_ms: 30000
+    end_timeout_ms: 90000
+    timeout_ms: 120000
+    pre_silence_ms: 300
+    silence_duration_ms: 3000
+    description: Wait for agent response.
+
+  - type: audio.stop_recording
+
+  - type: platform.exit
+
+  - type: control.log
+    message: LiveKit Agents real smoke scenario completed.

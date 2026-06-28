@@ -1,0 +1,53 @@
+---
+name: agora_agents_real
+description: Real Agora Conversational AI smoke scenario for aeval run.
+analysis:
+  preset: config/analysis_presets/default.yaml
+  report:
+    template: medialab.html.jinja2
+params:
+  output_dir: output/agora-agents
+steps:
+  - type: platform.setup
+    platform_id: agora
+    mode: ${env.AGORA_MODE:-storage}
+    params:
+      email: ${env.AGORA_CONSOLE_EMAIL:-}
+      password: ${env.AGORA_CONSOLE_PASSWORD:-}
+      storage_file: ${env.AGORA_STORAGE_FILE:-.secrets/session/agora.json}
+
+  - type: audio.start_recording
+    channels: 2
+    sample_rate: 48000
+
+  - type: platform.enter
+    mode: ${env.AGORA_ENTER_MODE:-}
+    params:
+      agent_name: ${env.AGORA_AGENT_NAME:-Assistant}
+
+  - type: audio.wait_for_speech
+    start_timeout_ms: 30000
+    end_timeout_ms: 60000
+    timeout_ms: 90000
+    pre_silence_ms: 300
+    silence_duration_ms: 3000
+    description: Wait for agent greeting.
+
+  - type: audio.play
+    file: examples/multi_turn_dialogue/audio/1_paris.mp3
+    description: Play one user prompt.
+
+  - type: audio.wait_for_speech
+    start_timeout_ms: 30000
+    end_timeout_ms: 90000
+    timeout_ms: 120000
+    pre_silence_ms: 300
+    silence_duration_ms: 3000
+    description: Wait for agent response.
+
+  - type: audio.stop_recording
+
+  - type: platform.exit
+
+  - type: control.log
+    message: Agora Agents real smoke scenario completed.

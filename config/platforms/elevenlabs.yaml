@@ -74,8 +74,8 @@ actions:
   # Account Mode: Login with email and password
   setup:account:
     - type: browser.ensure_authenticated
-      target_url: ${config.url}
-      authenticated_url_pattern: "**/app/agents**"
+      target_url: ${params.agent_url}
+      authenticated_selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto:has(svg path[d^='M3.7489'])"
       login_url_pattern: '**/app/sign-in**'
       login_selector: input[data-testid='sign-in-email-input']
       email_selector: input[data-testid='sign-in-email-input']
@@ -84,7 +84,7 @@ actions:
       email: ${params.email}
       password: ${params.password}
       storage_file: ${params.storage_file}
-      post_login_url_pattern: '**/app/agents**'
+      post_login_url_pattern: '**/app/home**'
       wait_until: domcontentloaded
       timeout_ms: 60000
       target_timeout_ms: 60000
@@ -200,6 +200,9 @@ actions:
 
   # Enter via direct agent URL
   enter:agent_url:
+    - type: browser.wait_for_url
+      pattern: "**/app/agents/agents/**/preview**"
+      timeout_ms: 30000
     - type: browser.wait_for_element
       selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto:has(svg path[d^='M3.7489'])"
       timeout_ms: 60000

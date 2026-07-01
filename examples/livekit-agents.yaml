@@ -18,6 +18,8 @@ steps:
 
   - type: platform.enter
 
+  - type: platform.wait_for_active
+
   - type: audio.wait_for_speech
     start_timeout_ms: 30000
     end_timeout_ms: 60000

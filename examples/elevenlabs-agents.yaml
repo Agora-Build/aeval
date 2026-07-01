@@ -42,6 +42,10 @@ steps:
     params:
       agent_url: ${env.ELEVENLABS_AGENT_URL}
 
+  - type: platform.wait_for_active
+    platform_id: elevenlabs
+    mode: agent_url
+
   - type: audio.wait_for_speech
     start_timeout_ms: 30000
     end_timeout_ms: 60000

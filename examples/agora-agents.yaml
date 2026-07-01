@@ -25,6 +25,9 @@ steps:
     params:
       agent_name: ${env.AGORA_AGENT_NAME:-Assistant}
 
+  - type: platform.wait_for_active
+    mode: ${env.AGORA_ENTER_MODE:-}
+
   - type: audio.wait_for_speech
     start_timeout_ms: 30000
     end_timeout_ms: 60000

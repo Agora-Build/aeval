@@ -207,6 +207,17 @@ actions:
     - type: control.log
       message: 'Agora conversation started with agent: ${params.agent_name}'
 
+  # Active check: the close button appears only after the conversation is connected.
+  wait_for_active:
+    - type: browser.wait_for_element
+      selector: button.text-destructive:has(svg.lucide-x):not([disabled])
+      state: visible
+      timeout_ms: 30000
+    - type: control.sleep
+      duration: 1000
+    - type: control.log
+      message: Agora conversation active
+
   # ========== Exit Actions ==========
   # Exit (Default): Click close button
   exit:

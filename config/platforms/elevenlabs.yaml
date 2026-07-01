@@ -25,16 +25,20 @@ mode_routes:
   public:
     setup: public
     enter: public
+    wait_for_active: public
     exit: public
   account:
     setup: account
     enter: agent_url
+    wait_for_active: agent_url
   storage:
     setup: storage
     enter: agent_url
+    wait_for_active: agent_url
   manual:
     setup: manual
     enter: select_agent
+    wait_for_active: select_agent
 actions:
   # ==========================================================================
   # Setup Actions (Authentication)
@@ -76,6 +80,7 @@ actions:
     - type: browser.ensure_authenticated
       target_url: ${params.agent_url}
       authenticated_selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto:has(svg path[d^='M3.7489'])"
+      authenticated_url_pattern: "**/app/agents/agents/**/preview**"
       login_url_pattern: '**/app/sign-in**'
       login_selector: input[data-testid='sign-in-email-input']
       email_selector: input[data-testid='sign-in-email-input']
@@ -84,7 +89,9 @@ actions:
       email: ${params.email}
       password: ${params.password}
       storage_file: ${params.storage_file}
-      post_login_url_pattern: '**/app/home**'
+      post_login_url_patterns:
+        - "**/app/home**"
+        - "**/app/agents**"
       wait_until: domcontentloaded
       timeout_ms: 60000
       target_timeout_ms: 60000
@@ -213,6 +220,42 @@ actions:
       duration: 5000
     - type: control.log
       message: 'ElevenLabs conversation started with direct agent URL'
+
+  # Active checks: verify the call actually connected, not just that click worked.
+  wait_for_active:agent_url:
+    - type: browser.wait_for_element
+      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full.bg-red-500"
+      timeout_ms: 30000
+    - type: browser.wait_for_element
+      selector: "text=Call or send a message to start a new conversation"
+      state: hidden
+      timeout_ms: 30000
+    - type: control.sleep
+      duration: 1000
+    - type: control.log
+      message: ElevenLabs call active (direct agent URL)
+
+  wait_for_active:select_agent:
+    - type: browser.wait_for_element
+      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full.bg-red-500"
+      timeout_ms: 30000
+    - type: browser.wait_for_element
+      selector: "text=Call or send a message to start a new conversation"
+      state: hidden
+      timeout_ms: 30000
+    - type: control.sleep
+      duration: 1000
+    - type: control.log
+      message: ElevenLabs call active (selected agent)
+
+  wait_for_active:public:
+    - type: browser.wait_for_element
+      selector: button.tw-size-12.tw-bg-black.tw-text-white
+      timeout_ms: 30000
+    - type: control.sleep
+      duration: 1000
+    - type: control.log
+      message: ElevenLabs call active (public mode)
 
   # Exit: End conversation
   exit:

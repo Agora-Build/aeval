@@ -139,6 +139,16 @@ actions:
     - type: control.log
       message: 'Agora debug conversation started with agent: ${params.agent_name}'
 
+  wait_for_active:
+    - type: browser.wait_for_element
+      selector: button.text-destructive:has(svg.lucide-x):not([disabled])
+      state: visible
+      timeout_ms: 30000
+    - type: control.sleep
+      duration: 1000
+    - type: control.log
+      message: Agora debug conversation active
+
   exit:
     - type: browser.wait_for_element
       selector: button.text-destructive:has(svg.lucide-x):not([disabled])

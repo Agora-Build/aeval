@@ -29,6 +29,17 @@ actions:
     - type: control.log
       message: LiveKit session started
 
+  # Active check: the destructive/end button appears after the session connects.
+  wait_for_active:
+    - type: browser.wait_for_element
+      selector: button[data-variant='destructive']
+      state: visible
+      timeout_ms: 30000
+    - type: control.sleep
+      duration: 1000
+    - type: control.log
+      message: LiveKit session active
+
   # Exit: End session
   exit:
     - type: browser.click

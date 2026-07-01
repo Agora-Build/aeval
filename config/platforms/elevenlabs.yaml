@@ -81,6 +81,7 @@ actions:
       target_url: ${params.agent_url}
       authenticated_selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto:has(svg path[d^='M3.7489'])"
       authenticated_url_pattern: "**/app/agents/agents/**/preview**"
+      authenticated_stability_ms: 2000
       login_url_pattern: '**/app/sign-in**'
       login_selector: input[data-testid='sign-in-email-input']
       email_selector: input[data-testid='sign-in-email-input']

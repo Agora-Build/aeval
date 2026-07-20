@@ -1,20 +1,18 @@
 ---
-# Agora Debug Platform Configuration
+# Agora Platform Configuration for customized agent 100111.
 #
-# Platform: Agora Conversational AI (Debug Deployment)
-# URL: https://convoai-web-custom-20260618.la3.agoralab.co/
-# Authentication: Required (email/password or storage state)
-#
-# Setup Modes:
-#   - storage: Use saved storage state (fastest)
-#   - account: Login with email and password (SSO)
-#   - manual: Manual login in browser window
-name: agora-debug
-description: Agora Conversational AI Debug Deployment
+# TEST-1144 compares the regular overseas Web demo with agent 100111, whose
+# semantic SOS private parameter shortens the detection interval from 200ms to
+# 120ms. This config keeps the regular Agora login/setup flow and changes only
+# the enter path: retrieve the custom agent by ID and enable Pause State before
+# starting the call.
+name: agora-100111
+description: Agora Conversational AI customized agent 100111 with Pause State
 config:
-  home_url: https://convoai-web-custom-20260618.la3.agoralab.co/
+  home_url: https://conversational-ai.agora.io/
   sso_login_url: https://sso2.agora.io/_/login
-  ignore_https_errors: true
+  agent_id: "100111"
+  env_prefix: AGORA
 auth:
   default_mode: auto
   auto_fallback: [ storage, account, manual ]
@@ -22,154 +20,240 @@ actions:
   setup:account:
     - type: browser.navigate
       url: ${config.home_url}
-      wait_until: domcontentloaded
+      wait_until: load
+
     - type: control.sleep
       duration: 3000
+
     - type: browser.click
       selector: button:has-text('Log in or Sign up')
       timeout_ms: 10000
+
     - type: control.sleep
       duration: 2000
+
     - type: browser.click
       selector: button:has-text('Agree')
       timeout_ms: 10000
-      required: false
+
     - type: control.sleep
       duration: 1000
+
     - type: browser.set_checkbox
       selector: button[role='checkbox'][id='terms']
       checked: true
       timeout_ms: 10000
+
     - type: browser.click
       selector: button:has-text('Log in with Agora account')
       timeout_ms: 10000
+
     - type: browser.wait_for_element
       selector: input[type='email'][placeholder='Enter email']
       state: visible
       timeout_ms: 15000
+
     - type: browser.fill
       selector: input[type='email'][placeholder='Enter email']
       value: ${params.email}
       timeout_ms: 15000
+
     - type: browser.fill
       selector: input[type='password'][placeholder='Enter password']
       value: ${params.password}
       timeout_ms: 15000
+
     - type: control.sleep
       duration: 1000
+
     - type: browser.wait_for_element
       selector: button:has-text('Sign In'):not([disabled])
       state: visible
       timeout_ms: 15000
+
     - type: browser.click
       selector: button:has-text('Sign In')
+
     - type: browser.wait_for_url
       pattern: ${config.home_url}
       timeout_ms: 60000
+
     - type: control.sleep
       duration: 3000
+
     - type: browser.save_storage_state
       file: ${params.storage_file}
+
     - type: control.log
-      message: Agora debug setup completed (account mode)
+      message: Agora 100111 setup completed (account mode)
 
   setup:storage:
     - type: browser.navigate
       url: ${config.home_url}
-      wait_until: domcontentloaded
+      wait_until: load
+
     - type: control.sleep
       duration: 2000
+
     - type: browser.load_storage_state
       file: ${params.storage_file}
+
     - type: browser.refresh
       timeout_ms: 30000
+
     - type: control.sleep
       duration: 3000
+
     - type: browser.wait_for_url
       pattern: ${config.home_url}
       timeout_ms: 10000
+
     - type: browser.click
       selector: button:has-text('Agree')
-      timeout_ms: 3000
+      timeout_ms: 5000
       required: false
+
     - type: control.log
-      message: Agora debug setup completed (storage mode)
+      message: Agora 100111 setup completed (storage mode)
 
   setup:manual:
     - type: browser.navigate
       url: ${config.home_url}
-      wait_until: domcontentloaded
+      wait_until: load
+
     - type: control.sleep
       duration: 3000
+
     - type: control.log
-      message: ⏸️  Please complete login in the browser window
+      message: Please complete login in the browser window
+
     - type: control.log
       message: Waiting for login completion (user avatar button should appear)...
+
     - type: browser.wait_for_element
       selector: button:has(svg circle[cx="16"])
       state: visible
       timeout_ms: 300000
+
     - type: control.log
-      message: ✅ Login detected (user avatar appeared), saving state...
+      message: Login detected (user avatar appeared), saving state...
+
     - type: control.sleep
       duration: 3000
+
     - type: browser.save_storage_state
       file: ${params.storage_file}
-    - type: control.log
-      message: ✅ Storage state saved
 
+    - type: control.log
+      message: Storage state saved
+
+  # Retrieve the TEST-1144 custom agent by ID on each run. The custom-agent
+  # input sits at the bottom of the right sidebar, so this flow scrolls that
+  # internal container rather than the whole page.
   enter:
     - type: browser.click
-      selector: button:has-text('Call AI Engine')
-      timeout_ms: 10000
-    - type: control.log
-      message: Agora debug conversation started
+      selector: button:has-text('Agree')
+      timeout_ms: 2000
+      required: false
 
-  enter:select_agent:
     - type: browser.click
-      selector: button:has-text('${params.agent_name}')
+      selector: button:has(svg.lucide-settings2)
       timeout_ms: 10000
+
+    - type: browser.scroll
+      selector: "div.overflow-y-auto:has(input[placeholder='Enter agent ID to retrieve'])"
+      position: bottom
+      timeout_ms: 10000
+
+    - type: browser.wait_for_element
+      selector: input[placeholder='Enter agent ID to retrieve']
+      state: visible
+      timeout_ms: 30000
+
+    - type: browser.fill
+      selector: input[placeholder='Enter agent ID to retrieve']
+      value: ${config.agent_id}
+      clear_first: true
+      timeout_ms: 10000
+
+    - type: browser.click
+      selector: button:has-text('Retrieve')
+      timeout_ms: 10000
+
+    - type: browser.wait_for_element
+      selector: "div.rounded-xl.border-2.bg-block-5:has-text('[100111]')"
+      state: visible
+      timeout_ms: 30000
+
+    - type: browser.click
+      selector: "${params.agent_selector:-div.rounded-xl.border-2.bg-block-5:has-text('[100111]')}"
+      timeout_ms: 30000
+      force: true
+
+    - type: browser.wait_for_element
+      selector: "div.rounded-xl.border-2.bg-block-5.border-brand-main-6:has-text('[100111]')"
+      state: visible
+      timeout_ms: 10000
+
+    - type: control.sleep
+      duration: 1000
+
+    - type: browser.scroll
+      selector: "div.overflow-y-auto:has(input[placeholder='Enter agent ID to retrieve'])"
+      position: top
+      timeout_ms: 10000
+
+    - type: browser.click
+      selector: button[role='tab']:has-text('Settings')
+      timeout_ms: 10000
+      force: true
+
+    - type: browser.wait_for_element
+      selector: text=Intelligent Interruption Handling
+      state: visible
+      timeout_ms: 10000
+
+    - type: browser.set_checkbox
+      selector: "label:has-text('Intelligent Interruption Handling') + button[role='switch']"
+      checked: true
+      timeout_ms: 10000
+
     - type: browser.click
       selector: button:has-text('Call AI Engine')
       timeout_ms: 10000
+
     - type: control.log
-      message: 'Agora debug conversation started with agent: ${params.agent_name}'
+      message: Agora conversation started with customized agent 100111 and Pause State enabled
 
   wait_for_active:
     - type: browser.wait_for_element
       selector: button.text-destructive:has(svg.lucide-x):not([disabled])
       state: visible
       timeout_ms: 30000
+
     - type: control.sleep
       duration: 1000
+
     - type: control.log
-      message: Agora debug conversation active
+      message: Agora customized agent 100111 conversation active
 
   exit:
     - type: browser.wait_for_element
       selector: button.text-destructive:has(svg.lucide-x):not([disabled])
       state: visible
       timeout_ms: 10000
+
     - type: browser.click
       selector: button.text-destructive:has(svg.lucide-x)
       timeout_ms: 10000
+
     - type: control.sleep
       duration: 2000
+
     - type: control.log
-      message: Agora debug conversation ended
+      message: Agora customized agent 100111 conversation ended
 
 agents:
-  - name: Assistant
-    description: Default assistant
-  - name: The Astrologer
-    description: Astrology assistant
-  - name: Penny (beta)
-    description: Beta assistant
-  - name: Echo Assistant
-    description: Echo assistant
-  - name: Vision
-    description: Vision assistant
-  - name: Customer Service - Phone In
-    description: Inbound customer service
-  - name: Customer Service - Phone Out
-    description: Outbound customer service
+  - id: "100111"
+    name: Customized Agent 100111
+    description: TEST-1144 semantic SOS 120ms private-parameter agent

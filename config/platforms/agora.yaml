@@ -183,9 +183,6 @@ actions:
       selector: button:has-text('Call AI Engine')
       timeout_ms: 10000
 
-    # Wait for conversation to establish
-    - type: control.sleep
-      duration: 3000
     - type: control.log
       message: Agora conversation started
 
@@ -201,9 +198,6 @@ actions:
       selector: button:has-text('Call AI Engine')
       timeout_ms: 10000
 
-    # Wait for conversation to establish
-    - type: control.sleep
-      duration: 3000
     - type: control.log
       message: 'Agora conversation started with agent: ${params.agent_name}'
 

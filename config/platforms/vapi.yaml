@@ -185,8 +185,6 @@ actions:
     - type: browser.click
       selector: text=Talk to vapi
       timeout_ms: 15000
-    - type: control.sleep
-      duration: 3000
     - type: control.log
       message: Vapi conversation started (public demo)
 
@@ -195,8 +193,6 @@ actions:
     - type: browser.click
       selector: text=Talk to Assistant
       timeout_ms: 15000
-    - type: control.sleep
-      duration: 3000
     - type: control.log
       message: Vapi conversation started (private agent)
 

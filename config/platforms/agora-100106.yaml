@@ -171,9 +171,6 @@ actions:
       selector: button:has-text('Call AI Engine')
       timeout_ms: 10000
 
-    - type: control.sleep
-      duration: 3000
-
     - type: control.log
       message: Agora conversation started with customized agent 100106
 

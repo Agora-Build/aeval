@@ -17,7 +17,7 @@ config:
   url: https://elevenlabs.io/app/agents
   public_url: https://elevenlabs.io/agents
   sign_in_url: https://elevenlabs.io/app/sign-in?redirect=%2Fapp%2Fagents
-  agent_url: https://elevenlabs.io/app/agents/agents/agent_6001kadq6pv0f598pjx96ahaxvsq/preview
+  agent_url: https://elevenlabs.io/app/agents/agents/agent_9801kyrhwh1ffgdr0wskw14xkfk0/preview
 auth:
   default_mode: auto
   auto_fallback: [ storage, account, public, manual ]

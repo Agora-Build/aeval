@@ -32,9 +32,11 @@ chmod +x aeval
 
 ## Audio I/O
 
-The built-in platform configurations default to native virtual-soundcard audio
-I/O. Existing scenarios remain unchanged: `audio.play` automatically uses the
-resolved soundcard route for corpus playback.
+Native virtual-soundcard audio I/O is the runtime default, even when `audio_io`
+is omitted. Existing scenarios remain unchanged: `audio.play` automatically
+uses the resolved soundcard route for corpus playback. The default device name
+is `BlackHole 2ch` on macOS and the ALSA card ID is `VirtualAudio` on Linux.
+Set `audio_io.soundcard.device` to override the device label or card ID.
 
 ### macOS
 
@@ -51,16 +53,15 @@ and add the current user to the audio group:
 ```bash
 sudo apt-get update
 sudo apt-get install -y alsa-utils libportaudio2 libsndfile1
-sudo modprobe snd-aloop id=ConvoBench pcm_substreams=1
+sudo modprobe snd-aloop id=VirtualAudio pcm_substreams=1
 sudo usermod -aG audio "$USER"
 ```
 
 Log in again after changing group membership. Before running `aeval`, verify
-that `/proc/asound/cards`, `aplay -l`, and `arecord -l` show the `ConvoBench`
+that `/proc/asound/cards`, `aplay -l`, and `arecord -l` show the `VirtualAudio`
 card with playback and capture devices.
 
-To use the legacy browser-injection route instead, set a scenario-level
-override. The former `audio_input` key is not supported.
+To use the legacy browser-injection route instead, set a scenario-level override:
 
 ```yaml
 audio_io:

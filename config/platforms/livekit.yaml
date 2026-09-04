@@ -8,6 +8,10 @@ name: livekit
 description: LiveKit Voice AI Playground (Public Demo)
 config:
   url: https://livekit.com/
+audio_io:
+  mode: soundcard
+  soundcard:
+    backend: auto
 auth:
   default_mode: public
   auto_fallback: [public]

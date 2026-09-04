@@ -15,6 +15,10 @@ config:
   home_url: https://convoai-web-custom-20260618.la3.agoralab.co/
   sso_login_url: https://sso2.agora.io/_/login
   ignore_https_errors: true
+audio_io:
+  mode: soundcard
+  soundcard:
+    backend: auto
 auth:
   default_mode: auto
   auto_fallback: [ storage, account, manual ]

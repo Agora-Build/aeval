@@ -13,6 +13,10 @@ config:
   sso_login_url: https://sso2.agora.io/_/login
   agent_id: "100111"
   env_prefix: AGORA
+audio_io:
+  mode: soundcard
+  soundcard:
+    backend: auto
 auth:
   default_mode: auto
   auto_fallback: [ storage, account, manual ]

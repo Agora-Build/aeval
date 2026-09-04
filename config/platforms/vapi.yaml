@@ -19,6 +19,10 @@ config:
   dashboard_url: https://dashboard.vapi.ai/
   assistants_url: https://dashboard.vapi.ai/assistants
   assistant_id: ${env.VAPI_ASSISTANT_ID}
+audio_io:
+  mode: soundcard
+  soundcard:
+    backend: auto
 auth:
   default_mode: auto
   auto_fallback: [storage, account, public]

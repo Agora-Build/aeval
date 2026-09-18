@@ -1,0 +1,36 @@
+---
+# Analyze a prerecorded stereo conversation without browser event metadata.
+# Channel 0 (left) must contain the user and channel 1 (right) the agent.
+cache: true
+parallel: false
+
+stages:
+  - stage: vad
+    config:
+      acoustic: ten
+      events: false
+      acoustic_config:
+        threshold: 0.6
+
+  - stage: vad_merger
+    config:
+      merge_strategy: union
+      min_gap_ms: 100
+
+  - stage: turn_segmenter
+    config:
+      interruption_tolerance_s: 2.0
+      ambiguity_profile: balanced
+
+  - stage: metrics_calculator
+    config: {}
+
+  - stage: html_reporter
+    config:
+      template: default.html.jinja2
+      output: report.html
+
+  - stage: json_exporter
+    config:
+      pretty: true
+      output: metrics.json

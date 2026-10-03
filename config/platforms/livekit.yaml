@@ -48,8 +48,16 @@ actions:
 
   # Exit: End session
   exit:
+    # Wait until the active end button is visible and enabled.
+    - type: browser.wait_for_element
+      selector: button[data-variant='destructive']:not([disabled])
+      state: visible
+      timeout_ms: 10000
     - type: browser.click
-      selector: button[data-variant='destructive']
-      timeout_ms: 5000
+      selector: button[data-variant='destructive']:not([disabled])
+      timeout_ms: 10000
+      required: false
+    - type: control.sleep
+      duration: 2000
     - type: control.log
       message: LiveKit session ended

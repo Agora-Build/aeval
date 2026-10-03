@@ -17,7 +17,7 @@ config:
   url: https://elevenlabs.io/app/agents
   public_url: https://elevenlabs.io/agents
   sign_in_url: https://elevenlabs.io/app/sign-in?redirect=%2Fapp%2Fagents
-  agent_url: https://elevenlabs.io/app/agents/agents/agent_9801kyrhwh1ffgdr0wskw14xkfk0/preview
+  agent_url: https://elevenlabs.io/app/agents/agents/agent_9801kyrhwh1ffgdr0wskw14xkfk0/preview?branchId=agtbrch_5501kyrhwhnfet3991r87twgjmqg
 audio_io:
   mode: soundcard
   soundcard:
@@ -74,7 +74,7 @@ actions:
       wait_until: domcontentloaded
       timeout_ms: 60000
     - type: browser.wait_for_url
-      pattern: "**/app/agents/agents/**/preview**"
+      pattern: "**/app/agents/agents/**"
       timeout_ms: 30000
     - type: control.log
       message: ElevenLabs setup completed (storage mode)
@@ -83,8 +83,8 @@ actions:
   setup:account:
     - type: browser.ensure_authenticated
       target_url: ${params.agent_url}
-      authenticated_selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto:has(svg path[d^='M3.7489'])"
-      authenticated_url_pattern: "**/app/agents/agents/**/preview**"
+      authenticated_selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto"
+      authenticated_url_pattern: "**/app/agents/agents/**"
       authenticated_stability_ms: 2000
       login_url_pattern: '**/app/sign-in**'
       login_selector: input[data-testid='sign-in-email-input']
@@ -208,13 +208,13 @@ actions:
   # Enter via direct agent URL
   enter:agent_url:
     - type: browser.wait_for_url
-      pattern: "**/app/agents/agents/**/preview**"
+      pattern: "**/app/agents/agents/**"
       timeout_ms: 30000
     - type: browser.wait_for_element
-      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto:has(svg path[d^='M3.7489'])"
+      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto"
       timeout_ms: 60000
     - type: browser.click
-      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto:has(svg path[d^='M3.7489'])"
+      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto"
       timeout_ms: 10000
     - type: control.log
       message: 'ElevenLabs conversation started with direct agent URL'

@@ -147,3 +147,9 @@ preset instead:
 ./aeval analyze SESSION_DIR \
   --config config/analysis_presets/default.yaml
 ```
+
+## License
+
+The project is licensed under the [MIT License](LICENSE), except for the audio
+corpus and its metadata under `corpus/`, which are dedicated to the public
+domain under [CC0 1.0 Universal](corpus/LICENSE).

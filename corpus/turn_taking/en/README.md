@@ -29,5 +29,5 @@ uv run --extra analysis-minimal convo-bench lab run lab_reference_en \
   --asset-root corpus/turn_taking/en
 ```
 
-This package is a local/private asset bundle structure only. Storage and
-distribution strategy can be decided later without changing the package layout.
+This package is part of the public audio corpus and is available under
+[CC0 1.0 Universal](../../LICENSE).

@@ -17,7 +17,7 @@ config:
   url: https://elevenlabs.io/app/agents
   public_url: https://elevenlabs.io/agents
   sign_in_url: https://elevenlabs.io/app/sign-in?redirect=%2Fapp%2Fagents
-  agent_url: https://elevenlabs.io/app/agents/agents/agent_9801kyrhwh1ffgdr0wskw14xkfk0/preview?branchId=agtbrch_5501kyrhwhnfet3991r87twgjmqg
+  agent_url: https://elevenlabs.io/app/agents/agents/agent_0501m5c8jbx6fcp98wm3x01bcswz/preview?branchId=agtbrch_6801m5c8jdnre5ca7ehay1z173hc
 audio_io:
   mode: soundcard
   soundcard:
@@ -157,6 +157,26 @@ actions:
   # Conversation Actions
   # ==========================================================================
 
+  configure:webrtc:
+    - type: browser.wait_for_element
+      selector: "button[aria-label='Preview settings']"
+      timeout_ms: 60000
+    - type: browser.click
+      selector: "button[aria-label='Preview settings']"
+      timeout_ms: 10000
+    - type: browser.set_checkbox
+      selector: "[role='menuitem']:has-text('WebRTC') button[role='switch']"
+      checked: true
+      timeout_ms: 10000
+    - type: browser.click
+      selector: "button[aria-label='Preview settings']"
+      force: true
+      timeout_ms: 10000
+    - type: browser.wait_for_element
+      selector: "[role='menuitem']:has-text('WebRTC')"
+      state: hidden
+      timeout_ms: 10000
+
   # Enter: Public demo widget
   enter:public:
     - type: browser.click
@@ -199,6 +219,13 @@ actions:
       timeout_ms: 60000
     - type: control.sleep
       duration: 5000
+    - &enable_webrtc
+      type: platform.configure
+      platform_id: elevenlabs
+      params:
+        mode: webrtc
+        success_message: '[ElevenLabs] WebRTC enabled successfully'
+        failure_message: '[ElevenLabs] WebRTC not enabled (setup failed or state could not be confirmed)'
     - type: browser.click
       selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full"
       timeout_ms: 10000
@@ -210,6 +237,7 @@ actions:
     - type: browser.wait_for_url
       pattern: "**/app/agents/agents/**"
       timeout_ms: 30000
+    - *enable_webrtc
     - type: browser.wait_for_element
       selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto"
       timeout_ms: 60000

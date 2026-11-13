@@ -148,6 +148,34 @@ preset instead:
   --config config/analysis_presets/default.yaml
 ```
 
+## Optional Browser Assistance
+
+An authorized application adapter can inspect and assist a headless run through
+an opt-in private local socket:
+
+```bash
+./aeval run examples/elevenlabs-agents.yaml \
+  --browser-control-socket /tmp/aeval-private-job/control.sock \
+  --browser-assistance-timeout 60
+```
+
+The socket directory must be private (mode `0700`); it is created if absent.
+Keep it outside exported artifacts. This does not expose a public browser link
+or include a viewer UI. The application must authorize access and separately
+authorize Take Control.
+
+Views start read-only. During supported authentication, element, or URL waits,
+an explicit controller can click, type, scroll, and open a verification URL in
+the same browser context. Links open in a new tab by default, preserving the
+login tab. Continuation checks the original condition without resubmitting login
+actions. Capture/input stop after five seconds without the viewer, and a held
+condition is checked before evaluation can continue.
+
+The local hold limit defaults to 60 seconds (configurable from 1 to 600). It
+does not extend application/job deadlines, and heartbeats cannot extend the
+hold. With no socket option, ordinary execution and timeout behavior remain
+unchanged. No scenario YAML changes are needed.
+
 ## License
 
 The project is licensed under the [MIT License](LICENSE), except for the audio

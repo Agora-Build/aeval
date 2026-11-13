@@ -30,7 +30,7 @@ actions:
   # Enter: Start conversation
   enter:
     - type: browser.click
-      selector: button:has-text('Talk to LiveKit Agent')
+      selector: '[role="button"][aria-label="Talk to LiveKit Agent"]'
       timeout_ms: 10000
     - type: control.log
       message: LiveKit session started

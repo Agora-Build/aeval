@@ -167,9 +167,13 @@ authorize Take Control.
 Views start read-only. During supported authentication, element, or URL waits,
 an explicit controller can click, type, scroll, and open a verification URL in
 the same browser context. Links open in a new tab by default, preserving the
-login tab. Continuation checks the original condition without resubmitting login
-actions. Capture/input stop after five seconds without the viewer, and a held
-condition is checked before evaluation can continue.
+login tab. Continuation restores the original target once and waits for its
+configured readiness condition, including delayed page rendering, without
+resubmitting login actions or repeatedly reloading the page. Capture/input stop
+after five seconds without the viewer, and a held condition is checked before
+evaluation can continue. The adapter can poll safe readiness reasons and the
+last assistance outcome through `session.status`; a continuation acknowledgment
+alone does not confirm readiness.
 
 The local hold limit defaults to 60 seconds (configurable from 1 to 600). It
 does not extend application/job deadlines, and heartbeats cannot extend the

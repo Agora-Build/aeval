@@ -12,6 +12,7 @@ audio_io:
   mode: soundcard
   soundcard:
     backend: auto
+    chromium_audio_buffer_size: 512
 auth:
   default_mode: public
   auto_fallback: [public]

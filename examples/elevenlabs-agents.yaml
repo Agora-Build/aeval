@@ -12,7 +12,7 @@ steps:
   # can false-positive before ElevenLabs loads the protected agent page.
   - type: browser.ensure_authenticated
     target_url: ${env.ELEVENLABS_AGENT_URL}
-    authenticated_selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto"
+    authenticated_selector: "main .center button[data-agent-id^='button-'].rounded-full.absolute.left-1\\/2.-translate-x-1\\/2.pointer-events-auto, button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto"
     authenticated_stability_ms: 2000
     login_url_pattern: "**/app/sign-in**"
     login_selector: input[data-testid='sign-in-email-input']

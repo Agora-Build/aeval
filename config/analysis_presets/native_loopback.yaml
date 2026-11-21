@@ -1,0 +1,41 @@
+---
+# Measurements use native WAV time and captured acoustic boundaries.
+# Browser clock alignment, SDK VAD events and write-submit estimates are unused.
+cache: false
+parallel: false
+stages:
+  - stage: events
+    config:
+      timebase: native_recording
+  - stage: vad
+    config:
+      acoustic: ten
+      acoustic_config:
+        threshold: 0.6
+        # Metric boundaries must not be expanded by transcription padding.
+        speech_pad_ms: 0
+      # User input can be speech, cough, laughter or other test material.
+      user_acoustic: energy
+      user_acoustic_config:
+        min_speech_duration_ms: 0
+        min_silence_duration_ms: 100
+        speech_pad_ms: 0
+      events: false
+  - stage: vad_merger
+    config:
+      merge_strategy: union
+      min_gap_ms: 100
+  - stage: turn_segmenter
+    config:
+      interruption_tolerance_s: 2.0
+      ambiguity_profile: balanced
+  - stage: metrics_calculator
+    config: {}
+  - stage: html_reporter
+    config:
+      template: default.html.jinja2
+      output: report.html
+  - stage: json_exporter
+    config:
+      pretty: true
+      output: metrics.json

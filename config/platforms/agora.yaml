@@ -18,6 +18,14 @@ audio_io:
   mode: soundcard
   soundcard:
     backend: auto
+    # Limit Linux Chromium playback batches to mitigate periodic AI PCM zero tails.
+    chromium_audio_buffer_size: 512
+  recording:
+    source: native_loopback
+    format: wav_float32
+    sample_rate: 48000
+    channel_layout: user_left_agent_right
+    preview: none
 auth:
   default_mode: auto
   auto_fallback: [ storage, account, manual ]

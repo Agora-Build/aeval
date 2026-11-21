@@ -18,10 +18,35 @@ config:
   public_url: https://elevenlabs.io/agents
   sign_in_url: https://elevenlabs.io/app/sign-in?redirect=%2Fapp%2Fagents
   agent_url: https://elevenlabs.io/app/agents/agents/agent_0501m5c8jbx6fcp98wm3x01bcswz/preview?branchId=agtbrch_6801m5c8jdnre5ca7ehay1z173hc
+  authentication:
+    login_origins: [https://elevenlabs.io]
+    storage_origins: [https://elevenlabs.io]
+    cookie_domains: [elevenlabs.io]
+    authenticated_url_patterns: ["**/app/home**", "**/app/agents**"]
+    authenticated_selector: "nav, [data-testid='app-sidebar'], main .center button[data-agent-id^='button-'].rounded-full.absolute.left-1\\/2.-translate-x-1\\/2.pointer-events-auto, button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto"
+    authenticated_stability_ms: 2000
+    stages:
+      - id: email_password
+        selector: "input[data-testid='sign-in-password-input']"
+        fields:
+          email: "input[data-testid='sign-in-email-input']"
+          password: "input[data-testid='sign-in-password-input']"
+        submit: "button[data-testid='sign-in-submit-button']"
+      - id: email
+        selector: "input[data-testid='sign-in-email-input']"
+        fields:
+          email: "input[data-testid='sign-in-email-input']"
+        submit: "button[data-testid='sign-in-submit-button']"
+      - id: password
+        selector: "input[data-testid='sign-in-password-input']"
+        fields:
+          password: "input[data-testid='sign-in-password-input']"
+        submit: "button[data-testid='sign-in-submit-button']"
 audio_io:
   mode: soundcard
   soundcard:
     backend: auto
+    chromium_audio_buffer_size: 512
 auth:
   default_mode: auto
   auto_fallback: [ storage, account, public, manual ]
@@ -82,8 +107,10 @@ actions:
   # Account Mode: Login with email and password
   setup:account:
     - type: browser.ensure_authenticated
+      authentication: ${config.authentication}
+      restore_storage_file: ${params._restore_storage_file}
       target_url: ${params.agent_url}
-      authenticated_selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto"
+      authenticated_selector: "main .center button[data-agent-id^='button-'].rounded-full.absolute.left-1\\/2.-translate-x-1\\/2.pointer-events-auto, button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto"
       authenticated_url_pattern: "**/app/agents/agents/**"
       authenticated_stability_ms: 2000
       login_url_pattern: '**/app/sign-in**'
@@ -215,7 +242,7 @@ actions:
     - type: control.sleep
       duration: 3000
     - type: browser.wait_for_element
-      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full"
+      selector: "main .center button[data-agent-id^='button-'].rounded-full.absolute.left-1\\/2.-translate-x-1\\/2.pointer-events-auto, button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto"
       timeout_ms: 60000
     - type: control.sleep
       duration: 5000
@@ -227,22 +254,24 @@ actions:
         success_message: '[ElevenLabs] WebRTC enabled successfully'
         failure_message: '[ElevenLabs] WebRTC not enabled (setup failed or state could not be confirmed)'
     - type: browser.click
-      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full"
+      selector: "main .center button[data-agent-id^='button-'].rounded-full.absolute.left-1\\/2.-translate-x-1\\/2.pointer-events-auto, button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto"
       timeout_ms: 10000
     - type: control.log
       message: 'ElevenLabs conversation started with agent: ${params.agent_name}'
 
   # Enter via direct agent URL
+  # The call button moved in ElevenLabs' 2026-11 agent preview redesign (`.center`, `-bottom-3`).
+  # The previous layout's selectors remain as fallbacks; `bg-red-500` still marks an active call.
   enter:agent_url:
     - type: browser.wait_for_url
       pattern: "**/app/agents/agents/**"
       timeout_ms: 30000
     - *enable_webrtc
     - type: browser.wait_for_element
-      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto"
+      selector: "main .center button[data-agent-id^='button-'].rounded-full.absolute.left-1\\/2.-translate-x-1\\/2.pointer-events-auto, button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto"
       timeout_ms: 60000
     - type: browser.click
-      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto"
+      selector: "main .center button[data-agent-id^='button-'].rounded-full.absolute.left-1\\/2.-translate-x-1\\/2.pointer-events-auto, button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto"
       timeout_ms: 10000
     - type: control.log
       message: 'ElevenLabs conversation started with direct agent URL'
@@ -250,7 +279,7 @@ actions:
   # Active checks: verify the call actually connected, not just that click worked.
   wait_for_active:agent_url:
     - type: browser.wait_for_element
-      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full.bg-red-500"
+      selector: "main .center button[data-agent-id^='button-'].rounded-full.absolute.left-1\\/2.-translate-x-1\\/2.bg-red-500, button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full.bg-red-500"
       timeout_ms: 30000
     - type: browser.wait_for_element
       selector: "text=Call or send a message to start a new conversation"
@@ -263,7 +292,7 @@ actions:
 
   wait_for_active:select_agent:
     - type: browser.wait_for_element
-      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full.bg-red-500"
+      selector: "main .center button[data-agent-id^='button-'].rounded-full.absolute.left-1\\/2.-translate-x-1\\/2.bg-red-500, button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full.bg-red-500"
       timeout_ms: 30000
     - type: browser.wait_for_element
       selector: "text=Call or send a message to start a new conversation"
@@ -286,7 +315,7 @@ actions:
   # Exit: End conversation
   exit:
     - type: browser.click
-      selector: "button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full.bg-red-500"
+      selector: "main .center button[data-agent-id^='button-'].rounded-full.absolute.left-1\\/2.-translate-x-1\\/2.bg-red-500, button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full.bg-red-500"
       timeout_ms: 10000
       force: true
     - type: control.sleep

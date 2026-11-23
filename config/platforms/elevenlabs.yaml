@@ -113,18 +113,10 @@ actions:
       authenticated_selector: "main .center button[data-agent-id^='button-'].rounded-full.absolute.left-1\\/2.-translate-x-1\\/2.pointer-events-auto, button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto"
       authenticated_url_pattern: "**/app/agents/agents/**"
       authenticated_stability_ms: 2000
-      login_url_pattern: '**/app/sign-in**'
-      login_selector: input[data-testid='sign-in-email-input']
-      email_selector: input[data-testid='sign-in-email-input']
-      password_selector: input[data-testid='sign-in-password-input']
-      submit_selector: button[data-testid='sign-in-submit-button']
+      # Login stages, selectors and post-login URLs come from config.authentication.
       email: ${params.email}
       password: ${params.password}
       storage_file: ${params.storage_file}
-      post_login_url_patterns:
-        - "**/app/home**"
-        - "**/app/agents**"
-      wait_until: domcontentloaded
       timeout_ms: 60000
       target_timeout_ms: 60000
       post_login_timeout_ms: 60000

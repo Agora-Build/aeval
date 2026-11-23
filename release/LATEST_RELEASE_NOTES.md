@@ -1,15 +1,15 @@
-# aeval v0.5.0
+# aeval v0.5.1
 
-Built: 2026-11-20 21:45:29 UTC
+Built: 2026-11-22 10:21:35 UTC
 
 ## Binary Assets
 
 | Asset | SHA256 | Size (bytes) |
 | --- | --- | ---: |
-| aeval-macos-arm64 | 99d7926cef08fd8c9cc7e7009be19c08d141ec3fe9712d18b442052028804452 | 259581680 |
-| aeval-macos-x86_64 | 8153d92425b2c073af3a63e65aaf41629422c067aab9f19aefbac3d095885fdf | 354308400 |
-| aeval-linux-x86_64 | 38de785f73b827b2197b7ca4b35529a3edd8e4a8d9086687229d7d3e195df0c5 | 431744456 |
-| aeval-linux-arm64 | 4178e52361afd798b4841e01355ab0c812146594a2d2bd422d17c6bca54f4783 | 343242800 |
+| aeval-macos-arm64 | 6f5cb2ad8986f68408704abba2a3fa790b6caca91aab15fbeec6cf80a5e3386e | 259589696 |
+| aeval-macos-x86_64 | d1ecc015f7795b2074a431d50938193b25a7cf2ad42138f3d21ccb216be98b4c | 354317040 |
+| aeval-linux-x86_64 | 197a7a2fd9fb08da41d99f3fe96e0fecca42817daa5c445d0bccd9527136b70e | 431750296 |
+| aeval-linux-arm64 | b34a339d3d371c41489e6b2cbee3c3267cefae197695a1723bcc97546308d594 | 343251632 |
 
 
 ## Public Repository Updates
@@ -65,92 +65,70 @@ OS="$(uname -s | tr '[:upper:]' '[:lower:]')"; ARCH="$(uname -m)"; case "${OS}-$
 - Releases: https://github.com/Agora-Build/aeval/releases
 - Repo: https://github.com/Agora-Build/aeval
 
-## Features
+## Breaking Changes
 
-- Generic optional `--session-id` across execution, reports, assistance and
-  private session checkpoints, without authentication-specific launch flags.
-- Restore-first account authentication for explicit storage files, including
-  supported combined and sequential credential stages and stage-bound
-  authorization after human verification.
-- Automatic private immutable session snapshots and ready records beside the
-  explicit storage file, for application-managed encrypted persistence.
-- Private headless browser assistance with explicit control, verification URLs,
-  bounded readiness continuation and factual observation metadata.
-- Host-level macOS aggregate-route selection without changing scenario YAML.
-- Separate manual build, prepare and publish commands; publishing verifies the
-  exact prepared binaries and notes without rebuilding or rerunning smoke.
+- Checkpoint and capability identifiers no longer name a product, because the
+  packaged `aeval` and the source `convo-bench` write the same formats. Ready
+  checkpoint records carry `"schema": "auth.checkpoint.v3"` instead of
+  `"protocol": "aeval.auth.v2"`. `capabilities --json` reports the schema
+  `eval.capabilities.v1`, the key `authentication.checkpoint_schema` and the
+  capability `auth.checkpoint.file.v3`. A record in another format is rejected
+  with `AUTH_CHECKPOINT_SCHEMA_UNSUPPORTED`. There are no aliases: applications
+  that read checkpoint records must update to these identifiers. Ready records
+  already in `<storage_file>.checkpoints/` cannot be read after upgrading; saved
+  storage files keep working.
 
 ## Fixes
 
-- Dispatch frozen multiprocessing workers before CLI imports so packaged native
-  recording can start without treating worker arguments as aeval commands.
-- Defer media sink binding until playback or explicit output selection so
-  discarded preload videos cannot poison native recording startup. Allow muted
-  SDK video probes without audio sink selection, and gate subsequent unmute on
-  the Agent sink. Genuine routing failures report one contextual diagnostic.
-- Preserve synchronous media `src`/`srcObject` reads required by LiveKit and
-  other SDKs while continuing to gate playback on the configured Agent output
-  device.
-- Load remote WebRTC audio only after the element's Agent sink is committed.
-  Chromium plays all remote audio in a page through one shared renderer, opened
-  on the device of the first element that loads it. Agora's never-played
-  per-track elements had moved the Agent to the default output and left native
-  recordings silent, while every element still reported the Agent sink.
-- Match ElevenLabs' redesigned agent preview call button in account login,
-  call start, active-call and exit steps, keeping the previous layout as a
-  fallback. Login had stopped recognising the authenticated page and reported
-  `AUTH_HUMAN_VERIFICATION_REQUIRED` after its 60-second wait.
-- Do not fail native recording for unused permission-restricted embedded
-  frames; actual output attempts with invalid routing remain fatal.
-- Detect missing macOS microphone authorization before native capture, with
-  actionable instructions rather than accepting a silent recording.
-- Require actual captured User-channel activity during each prompt in provider
-  smoke; playback markers and idle Agent replies alone cannot pass the gate.
-- Report the actual speech-wait phase and time budget on timeout.
-- Preserve per-input-channel levels and sanitized browser output state in native
-  recording manifests to diagnose silent Agent channels without altering PCM,
-  role selection or scoring. Add provider-free Chromium Agent-output hardware
-  checks for media elements, MediaStreams and Web Audio, using production launch
-  settings and verifying that headless Chromium is not muted at launch.
-- Include whitelisted inbound WebRTC audio packet/sample counters and decoded
-  energy in the bounded stop-time diagnostic snapshot, without exporting SDP,
-  network addresses or track IDs, tapping audio, or changing capture validity.
-  Correlate each report to the actual player track and include browser-reported
-  playout counters; a connection-wide receiver match alone is inconclusive.
-- Extend provider-free hardware checks to real WebRTC receiver tracks with the
-  full native JavaScript stack and recorder, including headful playback, source
-  replacement, and Agora's preset player with a never-played per-track element.
-  This covers a different Chromium renderer than local MediaStream tones. An
-  integration test also reads Chromium's WebRTC log to check the output device
-  of every shared remote-audio renderer, without audio hardware. Real-provider
-  qualification remains separate.
-- Acquire the pinned ONNX Runtime SDK from Microsoft's official native NuGet
-  package instead of the unavailable GitHub SDK archive, and stop cleanly on
-  download or package-validation errors.
-- Keep native Docker smoke on the soundcard path; missing Linux kernel audio
-  devices now fail with setup instructions rather than switching to Web Hook.
-- Reject stale packaged versions during release validation and changed
-  prepared artifacts during publication.
+- Replace known credentials in every log line, including browser console
+  output: credential-like environment values (`*_EMAIL`, `*_PASSWORD`,
+  `*_TOKEN`, `*_SECRET`, `*_API_KEY`) and values used by login steps. Mask
+  credentials in dict, JSON, quoted and `Bearer` text, and stop printing local
+  variable values in tracebacks.
+- Account login: a timeout after rejecting a wrong saved account now stops for
+  assistance instead of reporting `AUTH_BROWSER_OPERATION_FAILED`. A step without
+  `authenticated_selector` uses the provider profile's selector. Unexpected
+  browser failures log their exception type, never their message. A checkpoint
+  that cannot be published still refreshes the storage file unless the path is
+  unsafe. Generic login step keys that a provider profile ignores produce a
+  warning naming them.
+- Browser assistance: signing in to the wrong account while assisting is
+  reported as `account_mismatch` and checking continues, instead of expiring
+  silently. Failed readiness checks log their exception type once per wait. A
+  viewer whose page switch fails is closed so it can reopen.
+- Native recording: a recording left running by a failed test, or by a scenario
+  without `audio.stop_recording`, is stopped and attached to that test, so later
+  tests in a loop can record. An embedded frame that reloads or disappears no
+  longer invalidates the recording clock. A recorder shutdown failure no longer
+  skips releasing the device lock and the Linux ALSA route.
+- macOS: when macOS has never asked the app running ConvoBench for microphone
+  access, a desktop run shows the system prompt once and waits up to 60 seconds.
+  Denied or restricted access and SSH sessions fail as before.
+- Runs started in the same second get distinct session IDs and directories
+  instead of sharing one.
+- Speech-wait evidence reports each phase's own time budget.
+- When only the browser clock link of a valid native recording is invalid, the
+  warning now says that recording-timeline analysis (the `native_loopback`
+  preset) still scores it, instead of claiming that scoring is disabled.
+
+## Documentation
+
+- The README prerequisites list the full macOS native setup: BlackHole 2ch and
+  16ch, a 48 kHz Aggregate Device and its route profile.
+- Document the `storage_file` path rule: every folder must be a real folder,
+  so not `/tmp` or `$TMPDIR` on macOS.
 
 ## Qualification Scope
 
-On November 20, with the remote-audio sink fix, native Agora, ElevenLabs and
-LiveKit source smoke runs passed on macOS with full analysis. Each detected both
-speech waits and captured Agent audio only on the configured Agent channels. All
-ten provider-free Chromium Agent-output hardware cases also passed, including
-the Agora-shaped WebRTC case. Source tests do not qualify rebuilt release
-binaries. Generated release notes record the actual packaged validation results
-and any skipped gates. Offline Docker analysis does not qualify native Linux
-audio.
+On November 21, before packaging, source checks passed on macOS arm64: the
+full local suite, the native route check, all ten provider-free Chromium
+Agent-output hardware cases, and native LiveKit, Agora and ElevenLabs smokes.
+Each smoke validated its recording, captured User speech and detected both
+speech waits. None of the configured account credentials appeared in full in any
+smoke artifact. Source tests do not qualify rebuilt release binaries; the
+prepared notes' Smoke Test Status and Packaged Binary Validation Status sections
+record the gate results for these binaries.
 
-The earlier macOS packaged Agora smoke captured zero signal on the Agent
-channels and was rejected by strict validation. With the remote-audio sink fix,
-rebuilt macOS arm64 binaries passed the packaged Agora, ElevenLabs and LiveKit
-smokes on November 20. ElevenLabs then changed its agent preview page; after
-the selector fix, its source smoke passed again. The prepared notes' Smoke
-Test Status and Packaged Binary Validation Status sections record the final
-gate results for these binaries.
-
-Live human-verification stages and end-to-end application checkpoint consumption
-need deployment-specific qualification; LLM-assisted setup recording is not
-included in this release.
+The checkpoint identifier change has not been qualified with an application
+that consumes checkpoint records. Live human-verification stages still need
+deployment-specific qualification.

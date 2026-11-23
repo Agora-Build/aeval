@@ -14,16 +14,10 @@ steps:
     target_url: ${env.ELEVENLABS_AGENT_URL}
     authenticated_selector: "main .center button[data-agent-id^='button-'].rounded-full.absolute.left-1\\/2.-translate-x-1\\/2.pointer-events-auto, button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto"
     authenticated_stability_ms: 2000
-    login_url_pattern: "**/app/sign-in**"
-    login_selector: input[data-testid='sign-in-email-input']
-    email_selector: input[data-testid='sign-in-email-input']
-    password_selector: input[data-testid='sign-in-password-input']
-    submit_selector: button[data-testid='sign-in-submit-button']
+    # ElevenLabs uses its platform account profile for login stages and URLs.
     email: ${env.ELEVEN_CONSOLE_EMAIL:-}
     password: ${env.ELEVEN_CONSOLE_PASSWORD:-}
     storage_file: ${env.ELEVENLABS_STORAGE_FILE:-.secrets/session/elevenlabs.json}
-    post_login_url_pattern: "**/app/home**"
-    wait_until: domcontentloaded
     timeout_ms: 60000
     target_timeout_ms: 60000
     post_login_timeout_ms: 60000

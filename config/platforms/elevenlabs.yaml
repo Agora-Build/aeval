@@ -33,7 +33,8 @@ config:
           password: "input[data-testid='sign-in-password-input']"
         submit: "button[data-testid='sign-in-submit-button']"
       - id: email
-        selector: "input[data-testid='sign-in-email-input']"
+        # Verification retains the email field; Resend is not a login stage.
+        selector: "body:has(button[data-testid='sign-in-submit-button']:has-text('Sign in')) input[data-testid='sign-in-email-input']"
         fields:
           email: "input[data-testid='sign-in-email-input']"
         submit: "button[data-testid='sign-in-submit-button']"

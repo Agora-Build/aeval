@@ -1,6 +1,6 @@
 # aeval v0.5.1
 
-Built: 2026-11-22 10:21:35 UTC
+Built: 2026-11-23 07:03:49 UTC
 
 ## Binary Assets
 
@@ -85,6 +85,10 @@ OS="$(uname -s | tr '[:upper:]' '[:lower:]')"; ARCH="$(uname -m)"; case "${OS}-$
   `*_TOKEN`, `*_SECRET`, `*_API_KEY`) and values used by login steps. Mask
   credentials in dict, JSON, quoted and `Bearer` text, and stop printing local
   variable values in tracebacks.
+- ElevenLabs login recognises the email-only sign-in page only when its Sign in
+  button is present. The email-verification page keeps the email field beside
+  Resend; it is no longer treated as a credential stage, so login no longer
+  clicks Resend or times out on it and leaves the page for the human.
 - Account login: a timeout after rejecting a wrong saved account now stops for
   assistance instead of reporting `AUTH_BROWSER_OPERATION_FAILED`. A step without
   `authenticated_selector` uses the provider profile's selector. Unexpected

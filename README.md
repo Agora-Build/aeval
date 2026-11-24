@@ -244,6 +244,12 @@ evaluation can continue. The adapter can poll safe readiness reasons and the
 last assistance outcome through `session.status`; a continuation acknowledgment
 alone does not confirm readiness.
 
+Adapters can offer provider-configured verification and a single explicit
+**Sign in & continue** action. ElevenLabs verification opens in the original
+evaluation tab. Additional challenges remain with the user. Adapters can also
+open, operate and close an individual manual tab while the evaluation continues.
+Manual tabs share the browser's login session and are not credential targets.
+
 The local hold limit defaults to 60 seconds (configurable from 1 to 600). It
 does not extend application/job deadlines, and heartbeats cannot extend the
 hold. With no socket option, ordinary execution and timeout behavior remain
@@ -260,9 +266,10 @@ fallback. Keep state files private (normally mode `0600`) and outside artifacts.
 
 Recognized combined or sequential email/password forms use the provider's
 authentication profile. Verification links and challenges remain human actions.
-After human intervention, an additional credential stage requires explicit,
-stage-bound `authentication.continue` authorization from the application adapter;
-passive readiness checks and viewer disconnects never grant it. Unsupported
+After human intervention, credential entry requires an explicit command from
+the authorized adapter: `authentication.continue` for one stage or
+`authentication.continue_flow` for an opted-in provider sequence. Passive
+readiness checks and viewer disconnects do not grant authorization. Unsupported
 stages require human assistance or fail safely.
 
 Confirmed authentication is saved before checking agent-preview readiness, so a

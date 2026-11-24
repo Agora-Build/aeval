@@ -1,15 +1,15 @@
-# aeval v0.5.1
+# aeval v0.5.2
 
-Built: 2026-11-23 07:03:49 UTC
+Built: 2026-11-24 03:08:10 UTC
 
 ## Binary Assets
 
 | Asset | SHA256 | Size (bytes) |
 | --- | --- | ---: |
-| aeval-macos-arm64 | 6f5cb2ad8986f68408704abba2a3fa790b6caca91aab15fbeec6cf80a5e3386e | 259589696 |
-| aeval-macos-x86_64 | d1ecc015f7795b2074a431d50938193b25a7cf2ad42138f3d21ccb216be98b4c | 354317040 |
-| aeval-linux-x86_64 | 197a7a2fd9fb08da41d99f3fe96e0fecca42817daa5c445d0bccd9527136b70e | 431750296 |
-| aeval-linux-arm64 | b34a339d3d371c41489e6b2cbee3c3267cefae197695a1723bcc97546308d594 | 343251632 |
+| aeval-macos-arm64 | 815e4bcca950cb1cfb8846dcbfd528a39a9bbf9b60971baeca4989d1a2ecc451 | 259592880 |
+| aeval-macos-x86_64 | cdb4c94ff27369d19a0f9efd37b3f1d68ce9b92752f122d01d9d36433fcb3869 | 354321456 |
+| aeval-linux-x86_64 | d6820292abc5990a71656299b8aae53eef0aa49a8864f816871f35e7863ad67c | 431756944 |
+| aeval-linux-arm64 | 53b717d9031f5753bfbb6bd3100685206051a7b7179c5da088241fd6abb8fdd2 | 343254368 |
 
 
 ## Public Repository Updates
@@ -65,74 +65,24 @@ OS="$(uname -s | tr '[:upper:]' '[:lower:]')"; ARCH="$(uname -m)"; case "${OS}-$
 - Releases: https://github.com/Agora-Build/aeval/releases
 - Repo: https://github.com/Agora-Build/aeval
 
-## Breaking Changes
+## Browser Assistance
 
-- Checkpoint and capability identifiers no longer name a product, because the
-  packaged `aeval` and the source `convo-bench` write the same formats. Ready
-  checkpoint records carry `"schema": "auth.checkpoint.v3"` instead of
-  `"protocol": "aeval.auth.v2"`. `capabilities --json` reports the schema
-  `eval.capabilities.v1`, the key `authentication.checkpoint_schema` and the
-  capability `auth.checkpoint.file.v3`. A record in another format is rejected
-  with `AUTH_CHECKPOINT_SCHEMA_UNSUPPORTED`. There are no aliases: applications
-  that read checkpoint records must update to these identifiers. Ready records
-  already in `<storage_file>.checkpoints/` cannot be read after upgrading; saved
-  storage files keep working.
-
-## Fixes
-
-- Replace known credentials in every log line, including browser console
-  output: credential-like environment values (`*_EMAIL`, `*_PASSWORD`,
-  `*_TOKEN`, `*_SECRET`, `*_API_KEY`) and values used by login steps. Mask
-  credentials in dict, JSON, quoted and `Bearer` text, and stop printing local
-  variable values in tracebacks.
-- ElevenLabs login recognises the email-only sign-in page only when its Sign in
-  button is present. The email-verification page keeps the email field beside
-  Resend; it is no longer treated as a credential stage, so login no longer
-  clicks Resend or times out on it and leaves the page for the human.
-- Account login: a timeout after rejecting a wrong saved account now stops for
-  assistance instead of reporting `AUTH_BROWSER_OPERATION_FAILED`. A step without
-  `authenticated_selector` uses the provider profile's selector. Unexpected
-  browser failures log their exception type, never their message. A checkpoint
-  that cannot be published still refreshes the storage file unless the path is
-  unsafe. Generic login step keys that a provider profile ignores produce a
-  warning naming them.
-- Browser assistance: signing in to the wrong account while assisting is
-  reported as `account_mismatch` and checking continues, instead of expiring
-  silently. Failed readiness checks log their exception type once per wait. A
-  viewer whose page switch fails is closed so it can reopen.
-- Native recording: a recording left running by a failed test, or by a scenario
-  without `audio.stop_recording`, is stopped and attached to that test, so later
-  tests in a loop can record. An embedded frame that reloads or disappears no
-  longer invalidates the recording clock. A recorder shutdown failure no longer
-  skips releasing the device lock and the Linux ALSA route.
-- macOS: when macOS has never asked the app running ConvoBench for microphone
-  access, a desktop run shows the system prompt once and waits up to 60 seconds.
-  Denied or restricted access and SSH sessions fail as before.
-- Runs started in the same second get distinct session IDs and directories
-  instead of sharing one.
-- Speech-wait evidence reports each phase's own time budget.
-- When only the browser clock link of a valid native recording is invalid, the
-  warning now says that recording-timeline analysis (the `native_loopback`
-  preset) still scores it, instead of claiming that scoring is disabled.
-
-## Documentation
-
-- The README prerequisites list the full macOS native setup: BlackHole 2ch and
-  16ch, a 48 kHz Aggregate Device and its route profile.
-- Document the `storage_file` path rule: every folder must be a real folder,
-  so not `/tmp` or `$TMPDIR` on macOS.
+- Add provider-configured verification links and one-click continuation for
+  authorized sign-in stages. ElevenLabs opens the link in the original
+  evaluation tab; profiles can opt into a tracked second tab. A new human
+  challenge, a repeated credential stage or a viewer disconnect stops the flow.
+  Existing stage-by-stage authorization remains supported.
+- Add manual tabs that share the evaluation's browser context without pausing
+  the evaluation or becoming credential targets. Open, operate and close an
+  individual manual tab without closing the evaluation or verification tabs.
+- Advertise the new socket commands as `auth.verification-flow.v1` and
+  `viewer.manual-tabs.v1`. Applications must wire the corresponding controls and
+  authorize their use. The public binary does not ship a viewer UI.
 
 ## Qualification Scope
 
-On November 21, before packaging, source checks passed on macOS arm64: the
-full local suite, the native route check, all ten provider-free Chromium
-Agent-output hardware cases, and native LiveKit, Agora and ElevenLabs smokes.
-Each smoke validated its recording, captured User speech and detected both
-speech waits. None of the configured account credentials appeared in full in any
-smoke artifact. Source tests do not qualify rebuilt release binaries; the
-prepared notes' Smoke Test Status and Packaged Binary Validation Status sections
-record the gate results for these binaries.
-
-The checkpoint identifier change has not been qualified with an application
-that consumes checkpoint records. Live human-verification stages still need
-deployment-specific qualification.
+Local browser tests use deterministic verification fixtures. They check
+same-tab and second-tab flows, readiness on the evaluation target, and stopping
+at another challenge. A CLI smoke test uses Chromium and the private socket to
+show that the evaluation advances while manual input remains active. These are
+distinct from qualification of live human verification through Vox.

@@ -25,7 +25,12 @@ config:
     authenticated_url_patterns: ["**/app/home**", "**/app/agents**"]
     authenticated_selector: "nav, [data-testid='app-sidebar'], main .center button[data-agent-id^='button-'].rounded-full.absolute.left-1\\/2.-translate-x-1\\/2.pointer-events-auto, button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto"
     authenticated_stability_ms: 2000
+    verification:
+      tab: original
+      origins: [https://elevenlabs.io]
     stages:
+      - id: email_verification
+        selector: "button[data-testid='sign-in-submit-button']:text-is('Resend')"
       - id: email_password
         selector: "input[data-testid='sign-in-password-input']"
         fields:

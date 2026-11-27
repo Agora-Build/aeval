@@ -1,15 +1,15 @@
-# aeval v0.5.2
+# aeval v0.5.3
 
-Built: 2026-11-24 03:08:10 UTC
+Built: 2026-11-27 08:45:46 UTC
 
 ## Binary Assets
 
 | Asset | SHA256 | Size (bytes) |
 | --- | --- | ---: |
-| aeval-macos-arm64 | 815e4bcca950cb1cfb8846dcbfd528a39a9bbf9b60971baeca4989d1a2ecc451 | 259592880 |
-| aeval-macos-x86_64 | cdb4c94ff27369d19a0f9efd37b3f1d68ce9b92752f122d01d9d36433fcb3869 | 354321456 |
-| aeval-linux-x86_64 | d6820292abc5990a71656299b8aae53eef0aa49a8864f816871f35e7863ad67c | 431756944 |
-| aeval-linux-arm64 | 53b717d9031f5753bfbb6bd3100685206051a7b7179c5da088241fd6abb8fdd2 | 343254368 |
+| aeval-macos-arm64 | f36c241a656d430ecca9c10a47b02698a6827b4893b8fe96ee493d3486a90c39 | 259594656 |
+| aeval-macos-x86_64 | f04016d38884945cc1f237fde81dc10466e70e49dec6f67f8631874841a240e2 | 354322720 |
+| aeval-linux-x86_64 | c8da726b9c1df3bd9676b76ff6bd9e47310e80d791887d188b8a82d74373c203 | 431757576 |
+| aeval-linux-arm64 | c3af9346f9213718cec85e840776a47943b1c34ee27941b1e7848d1739d823cd | 343255656 |
 
 
 ## Public Repository Updates
@@ -65,24 +65,18 @@ OS="$(uname -s | tr '[:upper:]' '[:lower:]')"; ARCH="$(uname -m)"; case "${OS}-$
 - Releases: https://github.com/Agora-Build/aeval/releases
 - Repo: https://github.com/Agora-Build/aeval
 
-## Browser Assistance
+## ElevenLabs Preview
 
-- Add provider-configured verification links and one-click continuation for
-  authorized sign-in stages. ElevenLabs opens the link in the original
-  evaluation tab; profiles can opt into a tracked second tab. A new human
-  challenge, a repeated credential stage or a viewer disconnect stops the flow.
-  Existing stage-by-stage authorization remains supported.
-- Add manual tabs that share the evaluation's browser context without pausing
-  the evaluation or becoming credential targets. Open, operate and close an
-  individual manual tab without closing the evaluation or verification tabs.
-- Advertise the new socket commands as `auth.verification-flow.v1` and
-  `viewer.manual-tabs.v1`. Applications must wire the corresponding controls and
-  authorize their use. The public binary does not ship a viewer UI.
+- Dismiss ElevenLabs popups with a `Maybe later` or `Close` button during
+  guarded clicks, including starting and ending a call. The rules work when
+  WebRTC setup is skipped, do not dismiss alerts or credential prompts, and
+  do not run in the background during the evaluation.
+- Source installs require Playwright 1.44 or later for scoped dialog handling.
 
-## Qualification Scope
+## Native False-Interruption Scoring
 
-Local browser tests use deterministic verification fixtures. They check
-same-tab and second-tab flows, readiness on the evaluation target, and stopping
-at another challenge. A CLI smoke test uses Chromium and the private socket to
-show that the evaluation advances while manual input remains active. These are
-distinct from qualification of live human verification through Vox.
+- Score native `INT_FALSE` recordings on the WAV timeline instead of requiring
+  a browser clock. Keep the 1,500 ms agent speech-resume rule. `web_hook` runs
+  still use the browser-timed preset and its clock checks.
+- Use the native preset for a consistent comparison baseline: playback windows
+  can associate speech with different turns than the browser-timed preset did.

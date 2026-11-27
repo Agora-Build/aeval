@@ -1,0 +1,37 @@
+# INT_FALSE on native soundcard recordings. Keep the case's 1500 ms resume rule
+# without requiring browser timestamps for captured speech.
+cache: false
+parallel: false
+stages:
+  - stage: events
+    config:
+      timebase: native_recording
+  - stage: vad
+    config:
+      acoustic: ten
+      events: false
+      acoustic_config:
+        threshold: 0.6
+  - stage: vad_merger
+    config:
+      merge_strategy: union
+      min_gap_ms: 100
+  - stage: stt
+    config:
+      provider: whisper
+      language: ''
+  - stage: turn_segmenter
+    config:
+      interruption_tolerance_s: 2.0
+      ambiguity_profile: balanced
+      resume_gap_threshold_ms: 1500
+  - stage: metrics_calculator
+    config: {}
+  - stage: html_reporter
+    config:
+      template: medialab.html.jinja2
+      output: report.html
+  - stage: json_exporter
+    config:
+      pretty: true
+      output: metrics.json

@@ -18,6 +18,15 @@ config:
   public_url: https://elevenlabs.io/agents
   sign_in_url: https://elevenlabs.io/app/sign-in?redirect=%2Fapp%2Fagents
   agent_url: https://elevenlabs.io/app/agents/agents/agent_0501m5c8jbx6fcp98wm3x01bcswz/preview?branchId=agtbrch_6801m5c8jdnre5ca7ehay1z173hc
+  dismiss_dialogs:
+    - name: ElevenLabs dismissible popup
+      selector: >-
+        :is(dialog[open], [role='dialog'], [aria-modal='true']):not([role='alertdialog']):not(:has(
+        input[type='password'], input[type='email'], input[autocomplete='one-time-code']))
+      dismiss_selectors:
+        - ":is(button, [role='button']):text-is('Maybe later')"
+        - >-
+          :is(button, [role='button']):is(:text-is('Close'), [aria-label='Close'], [title='Close'])
   authentication:
     login_origins: [https://elevenlabs.io]
     storage_origins: [https://elevenlabs.io]
@@ -183,19 +192,17 @@ actions:
   # ==========================================================================
 
   configure:webrtc:
-    - type: browser.wait_for_element
-      selector: "button[aria-label='Preview settings']"
-      timeout_ms: 60000
     - type: browser.click
       selector: "button[aria-label='Preview settings']"
-      timeout_ms: 10000
+      dismiss_dialogs: ${config.dismiss_dialogs}
+      timeout_ms: 60000
     - type: browser.set_checkbox
       selector: "[role='menuitem']:has-text('WebRTC') button[role='switch']"
       checked: true
       timeout_ms: 10000
-    - type: browser.click
-      selector: "button[aria-label='Preview settings']"
-      force: true
+    - type: browser.press_key
+      selector: "[role='menuitem']:has-text('WebRTC') button[role='switch']"
+      key: Escape
       timeout_ms: 10000
     - type: browser.wait_for_element
       selector: "[role='menuitem']:has-text('WebRTC')"
@@ -206,12 +213,14 @@ actions:
   enter:public:
     - type: browser.click
       selector: button:has-text('Talk to an agent')
+      dismiss_dialogs: ${config.dismiss_dialogs}
       timeout_ms: 10000
     - type: browser.wait_for_element
       selector: button[aria-label='Start call']
       timeout_ms: 30000
     - type: browser.click
       selector: button[aria-label='Start call']
+      dismiss_dialogs: ${config.dismiss_dialogs}
       timeout_ms: 10000
     - type: browser.wait_for_element
       selector: button:has-text('I agree')
@@ -227,6 +236,7 @@ actions:
   enter:select_agent:
     - type: browser.click
       selector: "button:visible:has([data-agent-tooltip='${params.agent_name}'])"
+      dismiss_dialogs: ${config.dismiss_dialogs}
       timeout_ms: 10000
     - type: browser.wait_for_url
       pattern: "**/app/agents/agents/**"
@@ -236,6 +246,7 @@ actions:
       timeout_ms: 30000
     - type: browser.click
       selector: "a:has-text('Preview'), button:has-text('Preview')"
+      dismiss_dialogs: ${config.dismiss_dialogs}
       timeout_ms: 10000
     - type: control.sleep
       duration: 3000
@@ -253,6 +264,7 @@ actions:
         failure_message: '[ElevenLabs] WebRTC not enabled (setup failed or state could not be confirmed)'
     - type: browser.click
       selector: "main .center button[data-agent-id^='button-'].rounded-full.absolute.left-1\\/2.-translate-x-1\\/2.pointer-events-auto, button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto"
+      dismiss_dialogs: ${config.dismiss_dialogs}
       timeout_ms: 10000
     - type: control.log
       message: 'ElevenLabs conversation started with agent: ${params.agent_name}'
@@ -270,6 +282,7 @@ actions:
       timeout_ms: 60000
     - type: browser.click
       selector: "main .center button[data-agent-id^='button-'].rounded-full.absolute.left-1\\/2.-translate-x-1\\/2.pointer-events-auto, button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full, main .overlay.center button[data-agent-id^='button-'].pointer-events-auto"
+      dismiss_dialogs: ${config.dismiss_dialogs}
       timeout_ms: 10000
     - type: control.log
       message: 'ElevenLabs conversation started with direct agent URL'
@@ -315,7 +328,7 @@ actions:
     - type: browser.click
       selector: "main .center button[data-agent-id^='button-'].rounded-full.absolute.left-1\\/2.-translate-x-1\\/2.bg-red-500, button.absolute.bottom-0.left-1\\/2.-translate-x-1\\/2.rounded-full.bg-red-500"
       timeout_ms: 10000
-      force: true
+      dismiss_dialogs: ${config.dismiss_dialogs}
     - type: control.sleep
       duration: 2000
     - type: control.log
@@ -326,7 +339,7 @@ actions:
     - type: browser.click
       selector: button.tw-size-12.tw-bg-black.tw-text-white
       timeout_ms: 10000
-      force: true
+      dismiss_dialogs: ${config.dismiss_dialogs}
     - type: browser.wait_for_element
       selector: button[aria-label='Start call']
       timeout_ms: 30000

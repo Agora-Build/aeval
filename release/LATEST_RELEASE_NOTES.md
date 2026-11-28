@@ -1,15 +1,15 @@
-# aeval v0.5.3
+# aeval v0.5.4
 
-Built: 2026-11-27 08:45:46 UTC
+Built: 2026-11-28 12:55:55 UTC
 
 ## Binary Assets
 
 | Asset | SHA256 | Size (bytes) |
 | --- | --- | ---: |
-| aeval-macos-arm64 | f36c241a656d430ecca9c10a47b02698a6827b4893b8fe96ee493d3486a90c39 | 259594656 |
-| aeval-macos-x86_64 | f04016d38884945cc1f237fde81dc10466e70e49dec6f67f8631874841a240e2 | 354322720 |
-| aeval-linux-x86_64 | c8da726b9c1df3bd9676b76ff6bd9e47310e80d791887d188b8a82d74373c203 | 431757576 |
-| aeval-linux-arm64 | c3af9346f9213718cec85e840776a47943b1c34ee27941b1e7848d1739d823cd | 343255656 |
+| aeval-macos-arm64 | 408fbfec9d843cc16d69d83b0c10fdf519ff9b651774a1062bc6e06232ec2095 | 259596816 |
+| aeval-macos-x86_64 | 218f20a703a82231cff724beb6a93f7790b3e986163ddfb71084583ca5ca7a0e | 354324784 |
+| aeval-linux-x86_64 | 2307c3c456e77cb60bbcf02995beb23214a5ae98326f3d781f516e8a0bf42ecb | 431758096 |
+| aeval-linux-arm64 | a9099fe3a840ffcfa249e8de4b801205b3a9065ef973389962ce8c040d953e24 | 343257920 |
 
 
 ## Public Repository Updates
@@ -65,18 +65,12 @@ OS="$(uname -s | tr '[:upper:]' '[:lower:]')"; ARCH="$(uname -m)"; case "${OS}-$
 - Releases: https://github.com/Agora-Build/aeval/releases
 - Repo: https://github.com/Agora-Build/aeval
 
-## ElevenLabs Preview
+## ElevenLabs Popups
 
-- Dismiss ElevenLabs popups with a `Maybe later` or `Close` button during
-  guarded clicks, including starting and ending a call. The rules work when
-  WebRTC setup is skipped, do not dismiss alerts or credential prompts, and
-  do not run in the background during the evaluation.
-- Source installs require Playwright 1.44 or later for scoped dialog handling.
-
-## Native False-Interruption Scoring
-
-- Score native `INT_FALSE` recordings on the WAV timeline instead of requiring
-  a browser clock. Keep the 1,500 ms agent speech-resume rule. `web_hook` runs
-  still use the browser-timed preset and its clock checks.
-- Use the native preset for a consistent comparison baseline: playback windows
-  can associate speech with different turns than the browser-timed preset did.
+- Guarded clicks can dismiss stacked eligible popups one at a time, without
+  relying on promotion copy. Each popup must disappear before dismissal
+  continues, and the original click timeout still applies.
+- Log visible dialog counts, matching dismiss buttons, and dismissal timeouts
+  in the session's `logs/convo_benchmark.log` to diagnose failures like #40882.
+- Alerts and credential prompts are still excluded. Pages with no eligible
+  popups continue to use the ordinary click path.
